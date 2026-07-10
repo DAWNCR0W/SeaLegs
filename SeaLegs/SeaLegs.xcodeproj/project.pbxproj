@@ -1,0 +1,707 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02A4C242CE507C512FEB563DE3E325FF /* CaptureTargetResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5A3FD6496462248F2311C1779B995F /* CaptureTargetResolverTests.swift */; };
+		08DF9DC9727A251D292B862D1A6B1F42 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B52586D7FF9830110F99D789914B5F /* AppStateTests.swift */; };
+		0E78C23C460B713C4AA0F6A5160D4059 /* GameProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA46FAD1259B074C1EC7A66C72DAD0C /* GameProfile.swift */; };
+		109AB0DC324EC4318212EB55A3743563 /* SeaLegsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA08DDFC20BF4BDCA8EEF5ED3F34816 /* SeaLegsApp.swift */; };
+		156B5CE679868A28C94870141A757867 /* DiagnosticsExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FBF50E698FFDAE866A4C150FF85071 /* DiagnosticsExporter.swift */; };
+		1680FDFB64045A9138433B7A2EEF5C20 /* StreamOutputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD26D634156637E46C13D6788904B6B /* StreamOutputHandler.swift */; };
+		19001F64F7C4A4EA5B609FB88512587A /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B295A6594698BD87A5F7E94FFBE5FAF5 /* MenuBarController.swift */; };
+		1A958F875A4FE16A332FBC3ECB180EBC /* SessionReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807358E4D82E1A9347FC3C376D4795E /* SessionReport.swift */; };
+		1C8217F6D49E179863D33763D2A9B1C4 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B6EB6B937E00372F4BC55FADFF7B1B /* OnboardingView.swift */; };
+		248E86B6E651190825A8FA41A6A180FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D459EBF2C9EBFCC71AD941FAF99D99AD /* AppDelegate.swift */; };
+		2F5CABC0CDDE383C4F1585E233CE193C /* OptionalInputMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497AC041DF05FA6FB7512DDBCD52E7AC /* OptionalInputMonitor.swift */; };
+		31D70B5F64A8514F210D3C38FC2F273B /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDA9A04F2EA8DACAB1D1F464C6449B /* ProfileStore.swift */; };
+		3747453C88B50CBB192ECA9DD61F0681 /* SessionReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456049430A06BB7DCFF1A5FCF671CB12 /* SessionReportView.swift */; };
+		3881EFC12722AD0C957F9D0A81FF30DA /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495D9B1CD7E5B9D7243441C9A6850E10 /* HotkeyManager.swift */; };
+		3C33A10C89519F2FDFC3DAFD1F0CC5D0 /* OverlayShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = CEA53223E57EE686C7E8A2CE901C6676 /* OverlayShaders.metal */; };
+		3CC2F4DB964AAB714E3FEB76F533AC76 /* MotionScoreEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98ADB174498322650A3AA07A008F48B9 /* MotionScoreEngineTests.swift */; };
+		3DEC2B2F9B010CC4D384BAAA603A8BA1 /* OverlayMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE8F7F42AC24A6BD9AB7AFE9FF7189F /* OverlayMetalView.swift */; };
+		43C2672188410288D5663906B807A4C2 /* VisualCadenceEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C2F596D5FCCB01FAD0F04A1262520B /* VisualCadenceEstimator.swift */; };
+		46BD6BB46B5EEFBF1B92E7E39FA7C415 /* WindowInfoProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3880B6C3EA786CC9A00E2D55D7051B24 /* WindowInfoProviderTests.swift */; };
+		5102C5B1829598CF810F7E33907F586B /* PermissionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B08B07BAC05DF6A2B906918EF93E9E /* PermissionState.swift */; };
+		51DF4FD45101BD958CB693EAA9552B8F /* OverlayStateMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1750C5C39B30BAF88B74205DE17CB969 /* OverlayStateMappingTests.swift */; };
+		5361DA6A8C631590D46A59BEE99771BA /* OverlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE948430889B916424133BA51CD137E /* OverlayState.swift */; };
+		5EDC3B3089D13E94BB25025CDDDB662C /* CaptureResultGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DC0B5F845372A30D13BB5A723EBB18 /* CaptureResultGateTests.swift */; };
+		5F274833B594460C218AC09169C615F3 /* GameControllerMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F4B4B6385986E0CAE2E86B594E50AD /* GameControllerMonitorTests.swift */; };
+		60828E75BFE831C8A0ED065EE375370D /* SettingsRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEBD1ECD5E6D2972C2650C4B98F0B78 /* SettingsRootView.swift */; };
+		645B958B258EB8C0A7B594EE10C8D8D1 /* GameControllerMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC444FF6A4362069046983E08BEEC686 /* GameControllerMonitor.swift */; };
+		6BCD5B363FBED8CE67CB59DDAA0EA551 /* SessionLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7226F9A9700177C756EECAF2A116C22C /* SessionLogger.swift */; };
+		6C8745BFD2ABEDE7540CC3D0EF3D4336 /* GameDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF05F0FA623EF68FA65BB8A4ACF1B81D /* GameDetector.swift */; };
+		6DBC024D11D10C62951FC89387817ED2 /* BlockMotionEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD68F2578E55B9F01D05157D0F55EEBF /* BlockMotionEstimator.swift */; };
+		77766C42A5F09746B35267FAB7AB2655 /* MotionAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE34D729BDB89943F4ADCA386717A2BE /* MotionAnalyzer.swift */; };
+		8042EA70E6200404A1DB26466E5FAC7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C1C3598587B2C13A2DB39E0C931FA9E /* Assets.xcassets */; };
+		85482A6EB224244549E962190913EA93 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD66AF3A26EDD83BDEC8E00E1635BE6 /* PermissionManager.swift */; };
+		86621434678C4996B6894102618BCB4C /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6E9E16B9D1FAB5C4752CFCFD3B2173 /* AppState.swift */; };
+		883F0382D1BA184759F5F67770B2BBC5 /* RunningAppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2A9325CD1DC61566E114FB17C85B6F /* RunningAppInfo.swift */; };
+		8AEC18D48D0A0BB5495FB21072D410F2 /* CaptureResultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA653A23E4E63EAE03DF2EE27691D1F /* CaptureResultGate.swift */; };
+		8C5083C4DF5969ADD5685327579B9832 /* DefaultProfiles.json in Resources */ = {isa = PBXBuildFile; fileRef = DCCFB55213ECACDD8EDF6E6D08F78600 /* DefaultProfiles.json */; };
+		8F28DECB45FC4F64C157992D39880B55 /* OverlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF9F9EBC85E599F8876287D93D2AF4F /* OverlayManager.swift */; };
+		90C7747F83BCE3CACA886805EE3ED717 /* OptionalInputMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08D8F665280917BEE9E7B49E1AEFCC8 /* OptionalInputMonitorTests.swift */; };
+		9639516CBED3E93A0FD0D5D110BD997A /* OverlayRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23CAF5D6B111D19631A7B93068BFCE9 /* OverlayRenderer.swift */; };
+		9A725B94DD27923DE63F2BE2C9C0C533 /* SessionLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9311B2C2341FE9595A24B7FB443691 /* SessionLoggerTests.swift */; };
+		9C74BC9646B53E9B3B3826B069D95482 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E00C21145D11D108046F990D1A4F5DA /* Cocoa.framework */; };
+		A22891AE9AEFA3C60831F30141E11FF1 /* GameSettingRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE88A6EC14541D5D03A9CF36C062A45 /* GameSettingRecommendation.swift */; };
+		A50E47181DA0AF05B0926A3109A66A90 /* DefaultProfiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1EFAB00ABC45FF37E06A5B34EB1351 /* DefaultProfiles.swift */; };
+		A6D4FC6DCD8091018B5F30042BBF7404 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99A9A65748AC4B1401D2E2499B50AF3 /* AppCoordinator.swift */; };
+		A8F3C3F7B3FB4349ABBAC2BEB4F77C7E /* ScreenCaptureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96AFB375FB50DEA2F739ED8A50B74E2 /* ScreenCaptureManager.swift */; };
+		A94E300BAB2E238958A48911EB570D9A /* ProfileStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965FFE8C4CF4AB20C1059F5DE69CAEC2 /* ProfileStoreTests.swift */; };
+		A98BFBA9FF462C47A52A74579FBEF396 /* FrameReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFF0842B9AB3E1B4BA52C562F5A7F6 /* FrameReducer.swift */; };
+		ACBF7F37D24B08AAA64FBE2757F1D45B /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68E614E5AAC86A54DE8FD33A586AE18 /* AppLocalization.swift */; };
+		B5FDE006A924AC1C0CFE157C60748310 /* MotionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A83A5830A57BB50A596BB425D04C293 /* MotionMetrics.swift */; };
+		C97CA6070AB18EAB2D1EB192B3D59C00 /* BlockMotionEstimatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7CA43AE92183AB4FEB8C81002039CF /* BlockMotionEstimatorTests.swift */; };
+		D0733621DC132C009593946BCABA21DC /* MotionScoreEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA42F0E04E533B3296D2959E131EE1 /* MotionScoreEngine.swift */; };
+		D360E4D548E3A371EBF322BDA86D6E79 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B9281D2E8F45D03139CB5F7073488232 /* InfoPlist.strings */; };
+		D8EBD3DBBFCA76EAA95F16B2C4D7E41D /* OverlayPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E269CD23D30BC894B4FAC6E90CF59AA8 /* OverlayPanelController.swift */; };
+		DC483C7778C0005C9B26D1BC35D0616C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E00C21145D11D108046F990D1A4F5DA /* Cocoa.framework */; };
+		E0FE730991779D8D8B488F71F6EABC55 /* CaptureTargetResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2480B32B557CB3B93F7CE97D88485F /* CaptureTargetResolver.swift */; };
+		E2DED5B8B2E3B1FB3719F00ED36D6C8A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795DCE8431A225E833A2FD50925B4200 /* Constants.swift */; };
+		E411A738B03922CD5B67968EBF1FA7F1 /* DebugHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7153843074395C2B58A6EE6A6B968867 /* DebugHUDView.swift */; };
+		E4B3C49ADC57F178E1005DA2376DC1CD /* AppLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002FF7E6FCCE73AFFAAD6F08C068E04A /* AppLocalizationTests.swift */; };
+		E82BC84D0F0A63491C0B6AB4BCF5C910 /* ProfileEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41FEE1CBF0422966024266D82D4B10D /* ProfileEditorView.swift */; };
+		F244D63643495BCE576E8BA6B856A3A0 /* WindowInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4546003A1907C16E935AB733EC3018F /* WindowInfoProvider.swift */; };
+		F2F06566D188D987BF1E70EDB0362239 /* DiagnosticsExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46AACC1789FE43563CACD41320EB7AE /* DiagnosticsExporterTests.swift */; };
+		F7EE872BF451192F4A2EDD1239668C78 /* RecommendationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D88421C992C35DA4B5328E6FFEFB9C /* RecommendationEngine.swift */; };
+		FB5C47875E5C2B3F9BB93B165CC5197D /* OverlayConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACADE4ECC6335FACDF9C6FA90F65443 /* OverlayConfig.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		868AFDE7B17604B61F807B44F17CCAFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4894EE5F6BB25B836CFB3A845923BDE6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 814F3E60966BDDC711C569E525F2EA88;
+			remoteInfo = SeaLegs;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		002FF7E6FCCE73AFFAAD6F08C068E04A /* AppLocalizationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppLocalizationTests.swift; sourceTree = "<group>"; };
+		04B08B07BAC05DF6A2B906918EF93E9E /* PermissionState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PermissionState.swift; path = Permissions/PermissionState.swift; sourceTree = "<group>"; };
+		1750C5C39B30BAF88B74205DE17CB969 /* OverlayStateMappingTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OverlayStateMappingTests.swift; sourceTree = "<group>"; };
+		1E00C21145D11D108046F990D1A4F5DA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		21B99F895E350CC6026F4D08435F58AE /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2CE88A6EC14541D5D03A9CF36C062A45 /* GameSettingRecommendation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GameSettingRecommendation.swift; path = Profiles/GameSettingRecommendation.swift; sourceTree = "<group>"; };
+		3880B6C3EA786CC9A00E2D55D7051B24 /* WindowInfoProviderTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WindowInfoProviderTests.swift; sourceTree = "<group>"; };
+		3B85696CB2D52E19220BB5A6D5454A60 /* ko */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ko; path = Resources/ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3C1C3598587B2C13A2DB39E0C931FA9E /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3D1EFAB00ABC45FF37E06A5B34EB1351 /* DefaultProfiles.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DefaultProfiles.swift; path = Profiles/DefaultProfiles.swift; sourceTree = "<group>"; };
+		456049430A06BB7DCFF1A5FCF671CB12 /* SessionReportView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionReportView.swift; path = UI/SessionReportView.swift; sourceTree = "<group>"; };
+		46D88421C992C35DA4B5328E6FFEFB9C /* RecommendationEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RecommendationEngine.swift; path = Telemetry/RecommendationEngine.swift; sourceTree = "<group>"; };
+		495D9B1CD7E5B9D7243441C9A6850E10 /* HotkeyManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HotkeyManager.swift; path = Input/HotkeyManager.swift; sourceTree = "<group>"; };
+		497AC041DF05FA6FB7512DDBCD52E7AC /* OptionalInputMonitor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OptionalInputMonitor.swift; path = Input/OptionalInputMonitor.swift; sourceTree = "<group>"; };
+		4E2480B32B557CB3B93F7CE97D88485F /* CaptureTargetResolver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptureTargetResolver.swift; path = Capture/CaptureTargetResolver.swift; sourceTree = "<group>"; };
+		5B6E9E16B9D1FAB5C4752CFCFD3B2173 /* AppState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppState.swift; path = App/AppState.swift; sourceTree = "<group>"; };
+		5DD26D634156637E46C13D6788904B6B /* StreamOutputHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StreamOutputHandler.swift; path = Capture/StreamOutputHandler.swift; sourceTree = "<group>"; };
+		67B6EB6B937E00372F4BC55FADFF7B1B /* OnboardingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OnboardingView.swift; path = UI/OnboardingView.swift; sourceTree = "<group>"; };
+		6CE8F7F42AC24A6BD9AB7AFE9FF7189F /* OverlayMetalView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OverlayMetalView.swift; path = Overlay/OverlayMetalView.swift; sourceTree = "<group>"; };
+		6FA46FAD1259B074C1EC7A66C72DAD0C /* GameProfile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GameProfile.swift; path = Profiles/GameProfile.swift; sourceTree = "<group>"; };
+		6FEBD1ECD5E6D2972C2650C4B98F0B78 /* SettingsRootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsRootView.swift; path = UI/SettingsRootView.swift; sourceTree = "<group>"; };
+		7153843074395C2B58A6EE6A6B968867 /* DebugHUDView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DebugHUDView.swift; path = UI/DebugHUDView.swift; sourceTree = "<group>"; };
+		7226F9A9700177C756EECAF2A116C22C /* SessionLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionLogger.swift; path = Telemetry/SessionLogger.swift; sourceTree = "<group>"; };
+		795DCE8431A225E833A2FD50925B4200 /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = App/Constants.swift; sourceTree = "<group>"; };
+		7EA08DDFC20BF4BDCA8EEF5ED3F34816 /* SeaLegsApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SeaLegsApp.swift; sourceTree = "<group>"; };
+		7F5A3FD6496462248F2311C1779B995F /* CaptureTargetResolverTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CaptureTargetResolverTests.swift; sourceTree = "<group>"; };
+		86FBF50E698FFDAE866A4C150FF85071 /* DiagnosticsExporter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiagnosticsExporter.swift; path = Diagnostics/DiagnosticsExporter.swift; sourceTree = "<group>"; };
+		8AA653A23E4E63EAE03DF2EE27691D1F /* CaptureResultGate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptureResultGate.swift; path = Capture/CaptureResultGate.swift; sourceTree = "<group>"; };
+		965FFE8C4CF4AB20C1059F5DE69CAEC2 /* ProfileStoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProfileStoreTests.swift; sourceTree = "<group>"; };
+		98ADB174498322650A3AA07A008F48B9 /* MotionScoreEngineTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MotionScoreEngineTests.swift; sourceTree = "<group>"; };
+		9A83A5830A57BB50A596BB425D04C293 /* MotionMetrics.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MotionMetrics.swift; path = Analysis/MotionMetrics.swift; sourceTree = "<group>"; };
+		9ACADE4ECC6335FACDF9C6FA90F65443 /* OverlayConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OverlayConfig.swift; path = Profiles/OverlayConfig.swift; sourceTree = "<group>"; };
+		9C9311B2C2341FE9595A24B7FB443691 /* SessionLoggerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SessionLoggerTests.swift; sourceTree = "<group>"; };
+		A23CAF5D6B111D19631A7B93068BFCE9 /* OverlayRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OverlayRenderer.swift; path = Overlay/OverlayRenderer.swift; sourceTree = "<group>"; };
+		A46AACC1789FE43563CACD41320EB7AE /* DiagnosticsExporterTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DiagnosticsExporterTests.swift; sourceTree = "<group>"; };
+		A96AFB375FB50DEA2F739ED8A50B74E2 /* ScreenCaptureManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScreenCaptureManager.swift; path = Capture/ScreenCaptureManager.swift; sourceTree = "<group>"; };
+		A9D586AB37B4B8A7705AC585E3EB30C5 /* SeaLegs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SeaLegs.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC444FF6A4362069046983E08BEEC686 /* GameControllerMonitor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GameControllerMonitor.swift; path = Input/GameControllerMonitor.swift; sourceTree = "<group>"; };
+		AE34D729BDB89943F4ADCA386717A2BE /* MotionAnalyzer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MotionAnalyzer.swift; path = Capture/MotionAnalyzer.swift; sourceTree = "<group>"; };
+		B295A6594698BD87A5F7E94FFBE5FAF5 /* MenuBarController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MenuBarController.swift; path = UI/MenuBarController.swift; sourceTree = "<group>"; };
+		B3B52586D7FF9830110F99D789914B5F /* AppStateTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
+		B4546003A1907C16E935AB733EC3018F /* WindowInfoProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WindowInfoProvider.swift; path = GameDetection/WindowInfoProvider.swift; sourceTree = "<group>"; };
+		B5DFF0842B9AB3E1B4BA52C562F5A7F6 /* FrameReducer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FrameReducer.swift; path = Capture/FrameReducer.swift; sourceTree = "<group>"; };
+		BE7CA43AE92183AB4FEB8C81002039CF /* BlockMotionEstimatorTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BlockMotionEstimatorTests.swift; sourceTree = "<group>"; };
+		C0F71DDC16BB00250E5CA3E2F42D040C /* SeaLegsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeaLegsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAD66AF3A26EDD83BDEC8E00E1635BE6 /* PermissionManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PermissionManager.swift; path = Permissions/PermissionManager.swift; sourceTree = "<group>"; };
+		CEA53223E57EE686C7E8A2CE901C6676 /* OverlayShaders.metal */ = {isa = PBXFileReference; includeInIndex = 1; name = OverlayShaders.metal; path = Overlay/OverlayShaders.metal; sourceTree = "<group>"; };
+		D459EBF2C9EBFCC71AD941FAF99D99AD /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D65E391CE8B0989C61603EC175858506 /* SeaLegs.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = SeaLegs.entitlements; sourceTree = "<group>"; };
+		D68E614E5AAC86A54DE8FD33A586AE18 /* AppLocalization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppLocalization.swift; path = Localization/AppLocalization.swift; sourceTree = "<group>"; };
+		D6EDA9A04F2EA8DACAB1D1F464C6449B /* ProfileStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProfileStore.swift; path = Profiles/ProfileStore.swift; sourceTree = "<group>"; };
+		D99A9A65748AC4B1401D2E2499B50AF3 /* AppCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppCoordinator.swift; path = App/AppCoordinator.swift; sourceTree = "<group>"; };
+		DCCFB55213ECACDD8EDF6E6D08F78600 /* DefaultProfiles.json */ = {isa = PBXFileReference; includeInIndex = 1; name = DefaultProfiles.json; path = Resources/DefaultProfiles.json; sourceTree = "<group>"; };
+		E08D8F665280917BEE9E7B49E1AEFCC8 /* OptionalInputMonitorTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OptionalInputMonitorTests.swift; sourceTree = "<group>"; };
+		E269CD23D30BC894B4FAC6E90CF59AA8 /* OverlayPanelController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OverlayPanelController.swift; path = Overlay/OverlayPanelController.swift; sourceTree = "<group>"; };
+		E2C2F596D5FCCB01FAD0F04A1262520B /* VisualCadenceEstimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VisualCadenceEstimator.swift; path = Analysis/VisualCadenceEstimator.swift; sourceTree = "<group>"; };
+		E4FA42F0E04E533B3296D2959E131EE1 /* MotionScoreEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MotionScoreEngine.swift; path = Analysis/MotionScoreEngine.swift; sourceTree = "<group>"; };
+		E6DC0B5F845372A30D13BB5A723EBB18 /* CaptureResultGateTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CaptureResultGateTests.swift; sourceTree = "<group>"; };
+		E807358E4D82E1A9347FC3C376D4795E /* SessionReport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionReport.swift; path = Telemetry/SessionReport.swift; sourceTree = "<group>"; };
+		EAE948430889B916424133BA51CD137E /* OverlayState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OverlayState.swift; path = Overlay/OverlayState.swift; sourceTree = "<group>"; };
+		EF05F0FA623EF68FA65BB8A4ACF1B81D /* GameDetector.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GameDetector.swift; path = GameDetection/GameDetector.swift; sourceTree = "<group>"; };
+		F1F4B4B6385986E0CAE2E86B594E50AD /* GameControllerMonitorTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameControllerMonitorTests.swift; sourceTree = "<group>"; };
+		F41FEE1CBF0422966024266D82D4B10D /* ProfileEditorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProfileEditorView.swift; path = UI/ProfileEditorView.swift; sourceTree = "<group>"; };
+		FD68F2578E55B9F01D05157D0F55EEBF /* BlockMotionEstimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BlockMotionEstimator.swift; path = Analysis/BlockMotionEstimator.swift; sourceTree = "<group>"; };
+		FDF9F9EBC85E599F8876287D93D2AF4F /* OverlayManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OverlayManager.swift; path = Overlay/OverlayManager.swift; sourceTree = "<group>"; };
+		FE2A9325CD1DC61566E114FB17C85B6F /* RunningAppInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RunningAppInfo.swift; path = GameDetection/RunningAppInfo.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		77A53513A9BB3D17EE85552EF1E1D7DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC483C7778C0005C9B26D1BC35D0616C /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A77A81612C6CEDFA36C059E5CD86319A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C74BC9646B53E9B3B3826B069D95482 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		14C2A5296A51975535E128BF275E1BE7 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				1E00C21145D11D108046F990D1A4F5DA /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		4086E5D2BA0926201CC9D679111C48FC /* SeaLegsTests */ = {
+			isa = PBXGroup;
+			children = (
+				002FF7E6FCCE73AFFAAD6F08C068E04A /* AppLocalizationTests.swift */,
+				B3B52586D7FF9830110F99D789914B5F /* AppStateTests.swift */,
+				BE7CA43AE92183AB4FEB8C81002039CF /* BlockMotionEstimatorTests.swift */,
+				E6DC0B5F845372A30D13BB5A723EBB18 /* CaptureResultGateTests.swift */,
+				7F5A3FD6496462248F2311C1779B995F /* CaptureTargetResolverTests.swift */,
+				A46AACC1789FE43563CACD41320EB7AE /* DiagnosticsExporterTests.swift */,
+				F1F4B4B6385986E0CAE2E86B594E50AD /* GameControllerMonitorTests.swift */,
+				98ADB174498322650A3AA07A008F48B9 /* MotionScoreEngineTests.swift */,
+				E08D8F665280917BEE9E7B49E1AEFCC8 /* OptionalInputMonitorTests.swift */,
+				1750C5C39B30BAF88B74205DE17CB969 /* OverlayStateMappingTests.swift */,
+				965FFE8C4CF4AB20C1059F5DE69CAEC2 /* ProfileStoreTests.swift */,
+				9C9311B2C2341FE9595A24B7FB443691 /* SessionLoggerTests.swift */,
+				3880B6C3EA786CC9A00E2D55D7051B24 /* WindowInfoProviderTests.swift */,
+			);
+			name = SeaLegsTests;
+			path = SeaLegsTests;
+			sourceTree = "<group>";
+		};
+		784321D52976F27D3A22216FE08081B7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A9D586AB37B4B8A7705AC585E3EB30C5 /* SeaLegs.app */,
+				C0F71DDC16BB00250E5CA3E2F42D040C /* SeaLegsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BA8C590A48C41BC3AF0561D7BF2811D5 /* SeaLegs */ = {
+			isa = PBXGroup;
+			children = (
+				3C1C3598587B2C13A2DB39E0C931FA9E /* Assets.xcassets */,
+				B9281D2E8F45D03139CB5F7073488232 /* InfoPlist.strings */,
+				FD68F2578E55B9F01D05157D0F55EEBF /* BlockMotionEstimator.swift */,
+				9A83A5830A57BB50A596BB425D04C293 /* MotionMetrics.swift */,
+				E4FA42F0E04E533B3296D2959E131EE1 /* MotionScoreEngine.swift */,
+				E2C2F596D5FCCB01FAD0F04A1262520B /* VisualCadenceEstimator.swift */,
+				D99A9A65748AC4B1401D2E2499B50AF3 /* AppCoordinator.swift */,
+				5B6E9E16B9D1FAB5C4752CFCFD3B2173 /* AppState.swift */,
+				795DCE8431A225E833A2FD50925B4200 /* Constants.swift */,
+				D459EBF2C9EBFCC71AD941FAF99D99AD /* AppDelegate.swift */,
+				8AA653A23E4E63EAE03DF2EE27691D1F /* CaptureResultGate.swift */,
+				4E2480B32B557CB3B93F7CE97D88485F /* CaptureTargetResolver.swift */,
+				B5DFF0842B9AB3E1B4BA52C562F5A7F6 /* FrameReducer.swift */,
+				AE34D729BDB89943F4ADCA386717A2BE /* MotionAnalyzer.swift */,
+				A96AFB375FB50DEA2F739ED8A50B74E2 /* ScreenCaptureManager.swift */,
+				5DD26D634156637E46C13D6788904B6B /* StreamOutputHandler.swift */,
+				86FBF50E698FFDAE866A4C150FF85071 /* DiagnosticsExporter.swift */,
+				EF05F0FA623EF68FA65BB8A4ACF1B81D /* GameDetector.swift */,
+				FE2A9325CD1DC61566E114FB17C85B6F /* RunningAppInfo.swift */,
+				B4546003A1907C16E935AB733EC3018F /* WindowInfoProvider.swift */,
+				21B99F895E350CC6026F4D08435F58AE /* Info.plist */,
+				AC444FF6A4362069046983E08BEEC686 /* GameControllerMonitor.swift */,
+				495D9B1CD7E5B9D7243441C9A6850E10 /* HotkeyManager.swift */,
+				497AC041DF05FA6FB7512DDBCD52E7AC /* OptionalInputMonitor.swift */,
+				D68E614E5AAC86A54DE8FD33A586AE18 /* AppLocalization.swift */,
+				FDF9F9EBC85E599F8876287D93D2AF4F /* OverlayManager.swift */,
+				6CE8F7F42AC24A6BD9AB7AFE9FF7189F /* OverlayMetalView.swift */,
+				E269CD23D30BC894B4FAC6E90CF59AA8 /* OverlayPanelController.swift */,
+				A23CAF5D6B111D19631A7B93068BFCE9 /* OverlayRenderer.swift */,
+				CEA53223E57EE686C7E8A2CE901C6676 /* OverlayShaders.metal */,
+				EAE948430889B916424133BA51CD137E /* OverlayState.swift */,
+				CAD66AF3A26EDD83BDEC8E00E1635BE6 /* PermissionManager.swift */,
+				04B08B07BAC05DF6A2B906918EF93E9E /* PermissionState.swift */,
+				3D1EFAB00ABC45FF37E06A5B34EB1351 /* DefaultProfiles.swift */,
+				6FA46FAD1259B074C1EC7A66C72DAD0C /* GameProfile.swift */,
+				2CE88A6EC14541D5D03A9CF36C062A45 /* GameSettingRecommendation.swift */,
+				9ACADE4ECC6335FACDF9C6FA90F65443 /* OverlayConfig.swift */,
+				D6EDA9A04F2EA8DACAB1D1F464C6449B /* ProfileStore.swift */,
+				DCCFB55213ECACDD8EDF6E6D08F78600 /* DefaultProfiles.json */,
+				D65E391CE8B0989C61603EC175858506 /* SeaLegs.entitlements */,
+				7EA08DDFC20BF4BDCA8EEF5ED3F34816 /* SeaLegsApp.swift */,
+				46D88421C992C35DA4B5328E6FFEFB9C /* RecommendationEngine.swift */,
+				7226F9A9700177C756EECAF2A116C22C /* SessionLogger.swift */,
+				E807358E4D82E1A9347FC3C376D4795E /* SessionReport.swift */,
+				7153843074395C2B58A6EE6A6B968867 /* DebugHUDView.swift */,
+				B295A6594698BD87A5F7E94FFBE5FAF5 /* MenuBarController.swift */,
+				67B6EB6B937E00372F4BC55FADFF7B1B /* OnboardingView.swift */,
+				F41FEE1CBF0422966024266D82D4B10D /* ProfileEditorView.swift */,
+				456049430A06BB7DCFF1A5FCF671CB12 /* SessionReportView.swift */,
+				6FEBD1ECD5E6D2972C2650C4B98F0B78 /* SettingsRootView.swift */,
+			);
+			name = SeaLegs;
+			path = SeaLegs;
+			sourceTree = "<group>";
+		};
+		EF7C2F9FC30E5E5007806C9B26E3DFA0 = {
+			isa = PBXGroup;
+			children = (
+				784321D52976F27D3A22216FE08081B7 /* Products */,
+				F791CF757BE6764DC975C19FBDA0FEC6 /* Frameworks */,
+				BA8C590A48C41BC3AF0561D7BF2811D5 /* SeaLegs */,
+				4086E5D2BA0926201CC9D679111C48FC /* SeaLegsTests */,
+			);
+			sourceTree = "<group>";
+		};
+		F791CF757BE6764DC975C19FBDA0FEC6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				14C2A5296A51975535E128BF275E1BE7 /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1A474B4FA4843C734B349CFF5682A0BE /* SeaLegsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9CD07D743D05D658CB484EE38F352A1F /* Build configuration list for PBXNativeTarget "SeaLegsTests" */;
+			buildPhases = (
+				C5FE6875BA536ABB5B7FB65F44F53086 /* Sources */,
+				77A53513A9BB3D17EE85552EF1E1D7DC /* Frameworks */,
+				9725E9D4D95DE5C25B6927FF6111B60B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DF03777AEE8507FCF2B0CA8216A90019 /* PBXTargetDependency */,
+			);
+			name = SeaLegsTests;
+			productName = SeaLegsTests;
+			productReference = C0F71DDC16BB00250E5CA3E2F42D040C /* SeaLegsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		814F3E60966BDDC711C569E525F2EA88 /* SeaLegs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E30C4315491C94798D9F053DAB0B31B2 /* Build configuration list for PBXNativeTarget "SeaLegs" */;
+			buildPhases = (
+				938E9780D27EF7A563D066F1BF18C444 /* Sources */,
+				A77A81612C6CEDFA36C059E5CD86319A /* Frameworks */,
+				E34759ACBC3E602318F6F315C93A1ABD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SeaLegs;
+			productName = SeaLegs;
+			productReference = A9D586AB37B4B8A7705AC585E3EB30C5 /* SeaLegs.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4894EE5F6BB25B836CFB3A845923BDE6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
+			};
+			buildConfigurationList = 619CCF1E27C5F12FFDF26DBA4195D992 /* Build configuration list for PBXProject "SeaLegs" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				ko,
+			);
+			mainGroup = EF7C2F9FC30E5E5007806C9B26E3DFA0;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 784321D52976F27D3A22216FE08081B7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				814F3E60966BDDC711C569E525F2EA88 /* SeaLegs */,
+				1A474B4FA4843C734B349CFF5682A0BE /* SeaLegsTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9725E9D4D95DE5C25B6927FF6111B60B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34759ACBC3E602318F6F315C93A1ABD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8042EA70E6200404A1DB26466E5FAC7F /* Assets.xcassets in Resources */,
+				D360E4D548E3A371EBF322BDA86D6E79 /* InfoPlist.strings in Resources */,
+				8C5083C4DF5969ADD5685327579B9832 /* DefaultProfiles.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		938E9780D27EF7A563D066F1BF18C444 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DBC024D11D10C62951FC89387817ED2 /* BlockMotionEstimator.swift in Sources */,
+				B5FDE006A924AC1C0CFE157C60748310 /* MotionMetrics.swift in Sources */,
+				D0733621DC132C009593946BCABA21DC /* MotionScoreEngine.swift in Sources */,
+				43C2672188410288D5663906B807A4C2 /* VisualCadenceEstimator.swift in Sources */,
+				A6D4FC6DCD8091018B5F30042BBF7404 /* AppCoordinator.swift in Sources */,
+				86621434678C4996B6894102618BCB4C /* AppState.swift in Sources */,
+				E2DED5B8B2E3B1FB3719F00ED36D6C8A /* Constants.swift in Sources */,
+				248E86B6E651190825A8FA41A6A180FE /* AppDelegate.swift in Sources */,
+				8AEC18D48D0A0BB5495FB21072D410F2 /* CaptureResultGate.swift in Sources */,
+				E0FE730991779D8D8B488F71F6EABC55 /* CaptureTargetResolver.swift in Sources */,
+				A98BFBA9FF462C47A52A74579FBEF396 /* FrameReducer.swift in Sources */,
+				77766C42A5F09746B35267FAB7AB2655 /* MotionAnalyzer.swift in Sources */,
+				A8F3C3F7B3FB4349ABBAC2BEB4F77C7E /* ScreenCaptureManager.swift in Sources */,
+				1680FDFB64045A9138433B7A2EEF5C20 /* StreamOutputHandler.swift in Sources */,
+				156B5CE679868A28C94870141A757867 /* DiagnosticsExporter.swift in Sources */,
+				6C8745BFD2ABEDE7540CC3D0EF3D4336 /* GameDetector.swift in Sources */,
+				883F0382D1BA184759F5F67770B2BBC5 /* RunningAppInfo.swift in Sources */,
+				F244D63643495BCE576E8BA6B856A3A0 /* WindowInfoProvider.swift in Sources */,
+				645B958B258EB8C0A7B594EE10C8D8D1 /* GameControllerMonitor.swift in Sources */,
+				3881EFC12722AD0C957F9D0A81FF30DA /* HotkeyManager.swift in Sources */,
+				2F5CABC0CDDE383C4F1585E233CE193C /* OptionalInputMonitor.swift in Sources */,
+				ACBF7F37D24B08AAA64FBE2757F1D45B /* AppLocalization.swift in Sources */,
+				8F28DECB45FC4F64C157992D39880B55 /* OverlayManager.swift in Sources */,
+				3DEC2B2F9B010CC4D384BAAA603A8BA1 /* OverlayMetalView.swift in Sources */,
+				D8EBD3DBBFCA76EAA95F16B2C4D7E41D /* OverlayPanelController.swift in Sources */,
+				9639516CBED3E93A0FD0D5D110BD997A /* OverlayRenderer.swift in Sources */,
+				3C33A10C89519F2FDFC3DAFD1F0CC5D0 /* OverlayShaders.metal in Sources */,
+				5361DA6A8C631590D46A59BEE99771BA /* OverlayState.swift in Sources */,
+				85482A6EB224244549E962190913EA93 /* PermissionManager.swift in Sources */,
+				5102C5B1829598CF810F7E33907F586B /* PermissionState.swift in Sources */,
+				A50E47181DA0AF05B0926A3109A66A90 /* DefaultProfiles.swift in Sources */,
+				0E78C23C460B713C4AA0F6A5160D4059 /* GameProfile.swift in Sources */,
+				A22891AE9AEFA3C60831F30141E11FF1 /* GameSettingRecommendation.swift in Sources */,
+				FB5C47875E5C2B3F9BB93B165CC5197D /* OverlayConfig.swift in Sources */,
+				31D70B5F64A8514F210D3C38FC2F273B /* ProfileStore.swift in Sources */,
+				109AB0DC324EC4318212EB55A3743563 /* SeaLegsApp.swift in Sources */,
+				F7EE872BF451192F4A2EDD1239668C78 /* RecommendationEngine.swift in Sources */,
+				6BCD5B363FBED8CE67CB59DDAA0EA551 /* SessionLogger.swift in Sources */,
+				1A958F875A4FE16A332FBC3ECB180EBC /* SessionReport.swift in Sources */,
+				E411A738B03922CD5B67968EBF1FA7F1 /* DebugHUDView.swift in Sources */,
+				19001F64F7C4A4EA5B609FB88512587A /* MenuBarController.swift in Sources */,
+				1C8217F6D49E179863D33763D2A9B1C4 /* OnboardingView.swift in Sources */,
+				E82BC84D0F0A63491C0B6AB4BCF5C910 /* ProfileEditorView.swift in Sources */,
+				3747453C88B50CBB192ECA9DD61F0681 /* SessionReportView.swift in Sources */,
+				60828E75BFE831C8A0ED065EE375370D /* SettingsRootView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C5FE6875BA536ABB5B7FB65F44F53086 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4B3C49ADC57F178E1005DA2376DC1CD /* AppLocalizationTests.swift in Sources */,
+				08DF9DC9727A251D292B862D1A6B1F42 /* AppStateTests.swift in Sources */,
+				C97CA6070AB18EAB2D1EB192B3D59C00 /* BlockMotionEstimatorTests.swift in Sources */,
+				5EDC3B3089D13E94BB25025CDDDB662C /* CaptureResultGateTests.swift in Sources */,
+				02A4C242CE507C512FEB563DE3E325FF /* CaptureTargetResolverTests.swift in Sources */,
+				F2F06566D188D987BF1E70EDB0362239 /* DiagnosticsExporterTests.swift in Sources */,
+				5F274833B594460C218AC09169C615F3 /* GameControllerMonitorTests.swift in Sources */,
+				3CC2F4DB964AAB714E3FEB76F533AC76 /* MotionScoreEngineTests.swift in Sources */,
+				90C7747F83BCE3CACA886805EE3ED717 /* OptionalInputMonitorTests.swift in Sources */,
+				51DF4FD45101BD958CB693EAA9552B8F /* OverlayStateMappingTests.swift in Sources */,
+				A94E300BAB2E238958A48911EB570D9A /* ProfileStoreTests.swift in Sources */,
+				9A725B94DD27923DE63F2BE2C9C0C533 /* SessionLoggerTests.swift in Sources */,
+				46BD6BB46B5EEFBF1B92E7E39FA7C415 /* WindowInfoProviderTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DF03777AEE8507FCF2B0CA8216A90019 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SeaLegs;
+			target = 814F3E60966BDDC711C569E525F2EA88 /* SeaLegs */;
+			targetProxy = 868AFDE7B17604B61F807B44F17CCAFB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B9281D2E8F45D03139CB5F7073488232 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3B85696CB2D52E19220BB5A6D5454A60 /* ko */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		04AE57470DE9433EC4D070DC7DB17F6E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		986BB615079276EEA99513A2FA0ED281 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		A172EEE7D5293C01E5D7E29DC5EDF05B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SeaLegs/SeaLegs.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = SeaLegs/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dawncrow.SeaLegs;
+				PRODUCT_NAME = SeaLegs;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		E9027FA8AB310E4D2E705C86CDD86A43 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dawncrow.SeaLegsTests;
+				PRODUCT_NAME = SeaLegsTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeaLegs.app/Contents/MacOS/SeaLegs";
+			};
+			name = Release;
+		};
+		EEB9A179A31BE3436C43A0862ED6CD7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dawncrow.SeaLegsTests;
+				PRODUCT_NAME = SeaLegsTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeaLegs.app/Contents/MacOS/SeaLegs";
+			};
+			name = Debug;
+		};
+		FCFE85789FD424576CCD2325891E5959 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SeaLegs/SeaLegs.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = SeaLegs/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dawncrow.SeaLegs;
+				PRODUCT_NAME = SeaLegs;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		619CCF1E27C5F12FFDF26DBA4195D992 /* Build configuration list for PBXProject "SeaLegs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04AE57470DE9433EC4D070DC7DB17F6E /* Debug */,
+				986BB615079276EEA99513A2FA0ED281 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9CD07D743D05D658CB484EE38F352A1F /* Build configuration list for PBXNativeTarget "SeaLegsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9027FA8AB310E4D2E705C86CDD86A43 /* Release */,
+				EEB9A179A31BE3436C43A0862ED6CD7A /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E30C4315491C94798D9F053DAB0B31B2 /* Build configuration list for PBXNativeTarget "SeaLegs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCFE85789FD424576CCD2325891E5959 /* Release */,
+				A172EEE7D5293C01E5D7E29DC5EDF05B /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4894EE5F6BB25B836CFB3A845923BDE6 /* Project object */;
+}
