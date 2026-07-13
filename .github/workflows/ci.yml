@@ -33,7 +33,9 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Install locked project generator dependencies
-        run: bundle install --path vendor/bundle --jobs 4 --retry 3
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Verify deterministic project generation
         shell: bash
