@@ -1,6 +1,6 @@
 import CoreMedia
 import Foundation
-import ScreenCaptureKit
+@preconcurrency import ScreenCaptureKit
 
 @available(macOS 14.0, *)
 final class StreamOutputHandler: NSObject, SCStreamOutput {

@@ -11,11 +11,14 @@ final class AppCoordinator: ObservableObject {
     private let profileStore: ProfileStore
     private let permissionManager: PermissionManager
     private let gameDetector: GameDetector
+    private let windowInfoProvider: WindowInfoProvider
     private let overlayManager: OverlayManager
+    private let launchAtLoginService: LaunchAtLoginControlling
     private let hotkeyManager: HotkeyManager
     private let optionalInputMonitor: OptionalInputMonitor
     private let controllerMonitor: GameControllerMonitor
     private let motionAnalyzer: MotionAnalyzer
+    private let runtimeServicesEnabled: Bool
     private let captureSignals = CaptureRuntimeSignals()
     private var appSettings: AppSettings = .standard
     private lazy var sessionLogger = SessionLogger(sessionsURL: profileStore.sessionsURL)
@@ -41,19 +44,25 @@ final class AppCoordinator: ObservableObject {
         profileStore: ProfileStore = ProfileStore(),
         permissionManager: PermissionManager = PermissionManager(),
         gameDetector: GameDetector = GameDetector(),
+        windowInfoProvider: WindowInfoProvider = WindowInfoProvider(),
+        launchAtLoginService: LaunchAtLoginControlling = LaunchAtLoginService(),
         hotkeyManager: HotkeyManager = HotkeyManager(),
         optionalInputMonitor: OptionalInputMonitor = OptionalInputMonitor(),
         controllerMonitor: GameControllerMonitor = GameControllerMonitor(),
-        motionAnalyzer: MotionAnalyzer = MotionAnalyzer()
+        motionAnalyzer: MotionAnalyzer = MotionAnalyzer(),
+        runtimeServicesEnabled: Bool = true
     ) {
         self.profileStore = profileStore
         self.permissionManager = permissionManager
         self.gameDetector = gameDetector
+        self.windowInfoProvider = windowInfoProvider
+        self.launchAtLoginService = launchAtLoginService
         self.overlayManager = OverlayManager(overlayState: overlayState, appState: state)
         self.hotkeyManager = hotkeyManager
         self.optionalInputMonitor = optionalInputMonitor
         self.controllerMonitor = controllerMonitor
         self.motionAnalyzer = motionAnalyzer
+        self.runtimeServicesEnabled = runtimeServicesEnabled
     }
 
     func start() {
@@ -61,7 +70,14 @@ final class AppCoordinator: ObservableObject {
         state.selectedProfileID = state.profiles.first?.id
         appSettings = profileStore.loadSettings()
         state.language = appSettings.interface.language
+        refreshLaunchAtLoginStatus()
+        _ = targetOverlayRegions()
         sessionLogger.configure(settings: appSettings.telemetry)
+        guard runtimeServicesEnabled else {
+            state.permissionState = .unknown
+            state.statusMessage = "UI testing mode"
+            return
+        }
         if appSettings.privacy.inputSignalEnabled, permissionManager.hasInputMonitoringAccess {
             inputMonitoringEnabled = optionalInputMonitor.start()
         }
@@ -83,6 +99,9 @@ final class AppCoordinator: ObservableObject {
     }
 
     func stop() {
+        guard runtimeServicesEnabled else {
+            return
+        }
         maintenanceTimer?.invalidate()
         maintenanceTimer = nil
         captureGeneration = UUID()
@@ -148,7 +167,7 @@ final class AppCoordinator: ObservableObject {
         }
 
         overlayState.apply(config: profile.overlay, mode: mode)
-        showOverlay(on: targetScreens())
+        showOverlayForResolvedTarget()
         let activeTarget = state.activeProfile?.id == profile.id
         if mode == .adaptive, activeTarget {
             startAdaptiveCaptureIfAllowed()
@@ -200,7 +219,7 @@ final class AppCoordinator: ObservableObject {
         state.captureModeDescription = "feature demo"
         setEmergencyActive(false)
         overlayState.apply(config: baseConfig.highVisibilityDemo(), mode: .high)
-        showOverlay(on: targetScreens())
+        showOverlayForResolvedTarget()
         updateOverlayHUD(
             message: state.t("Feature demo overlay is visible."),
             detail: state.t("Shows center dot, crosshair, horizon, dashboard, nose, and peripheral frame.")
@@ -222,7 +241,7 @@ final class AppCoordinator: ObservableObject {
             let effectiveMode = state.currentMode == .off ? ComfortMode.medium : state.currentMode
             overlayState.apply(config: profile.overlay, mode: effectiveMode)
             if overlayState.emergencyActive {
-                showOverlay(on: targetScreens())
+                showOverlayForResolvedTarget()
             } else if state.currentMode == .off {
                 hideOverlay()
             }
@@ -291,6 +310,43 @@ final class AppCoordinator: ObservableObject {
         handleActiveAppChanged(app)
     }
 
+    func linkSelectedProfileToCurrentApp() {
+        guard let selectedProfile = state.selectedProfile, !selectedProfile.isTemplate else {
+            state.statusMessage = "Select a custom profile before linking an app."
+            return
+        }
+        let frontmostApp = gameDetector.currentFrontmostAppInfo()
+        guard let app = isSeaLegs(frontmostApp) ? state.currentApp : frontmostApp else {
+            state.statusMessage = "No application is available to link."
+            return
+        }
+        if let conflict = state.profiles.first(where: { profile in
+            profile.id != selectedProfile.id && profile.matches(
+                bundleIdentifier: app.bundleIdentifier,
+                executableName: app.executableName,
+                executablePath: app.executableURL?.path
+            )
+        }) {
+            state.statusMessage = String(
+                format: state.t("This app is already linked to %@."),
+                conflict.displayName
+            )
+            return
+        }
+
+        guard mutateSelectedProfile({ profile in
+            profile.bundleIdentifier = app.bundleIdentifier
+            profile.executableName = app.executableName
+            profile.executablePathHash = app.executableURL.map { GameProfile.stableHash($0.path) }
+        }, preview: false) else {
+            return
+        }
+        state.statusMessage = String(
+            format: state.t("Linked %@ to the selected profile."),
+            app.localizedName ?? app.executableName ?? state.t("App")
+        )
+    }
+
     func previewProfile(_ profile: GameProfile) {
         cancelFeatureDemo(restoreOverlay: false)
         if state.currentMode == .adaptive, state.activeProfile?.id != profile.id {
@@ -301,7 +357,7 @@ final class AppCoordinator: ObservableObject {
         let mode = profile.overlay.mode == .off ? ComfortMode.medium : profile.overlay.mode
         state.currentMode = mode
         overlayState.apply(config: profile.overlay, mode: mode)
-        showOverlay(on: targetScreens())
+        showOverlayForResolvedTarget()
         state.captureModeDescription = "preview"
         state.statusMessage = "Previewing \(profile.displayName)."
         updateOverlayHUD(message: "\(profile.displayName) · \(state.localizer.mode(mode))", detail: state.t("Preview"))
@@ -383,7 +439,7 @@ final class AppCoordinator: ObservableObject {
             let previewMode = profile.overlay.mode == .off ? ComfortMode.medium : profile.overlay.mode
             state.currentMode = previewMode
             overlayState.apply(config: profile.overlay, mode: previewMode)
-            showOverlay(on: targetScreens())
+            showOverlayForResolvedTarget()
             updateOverlayHUD(message: "\(profile.displayName) · \(state.localizer.mode(previewMode))", detail: state.t("Preview"))
         }
         menuRefreshHandler?()
@@ -410,7 +466,7 @@ final class AppCoordinator: ObservableObject {
         }
 
         overlayState.apply(config: profile.overlay, mode: mode)
-        showOverlay(on: targetScreens())
+        showOverlayForResolvedTarget()
         if mode == .adaptive, state.activeProfile?.id == profile.id {
             startAdaptiveCaptureIfAllowed()
         } else {
@@ -693,6 +749,216 @@ final class AppCoordinator: ObservableObject {
         }
     }
 
+    func exportSelectedProfile() {
+        guard let profile = state.selectedProfile else {
+            state.statusMessage = "Select a profile before exporting."
+            return
+        }
+        exportProfiles([profile], suggestedName: sanitizedFilename(profile.displayName))
+    }
+
+    func exportCustomProfiles() {
+        let profiles = state.profiles.filter { !$0.isTemplate }
+        guard !profiles.isEmpty else {
+            state.statusMessage = "No custom profiles are available to export."
+            return
+        }
+        exportProfiles(profiles, suggestedName: "SeaLegs-Profiles")
+    }
+
+    func importProfiles() {
+        let panel = NSOpenPanel()
+        panel.title = state.t("Import SeaLegs Profiles")
+        panel.allowedContentTypes = [.seaLegsProfile, .json]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        overlayManager.setModalInteractionSuspended(true)
+        defer { overlayManager.setModalInteractionSuspended(false) }
+        guard panel.runModal() == .OK, let url = panel.url else {
+            return
+        }
+
+        importProfiles(from: url)
+    }
+
+    func importProfiles(from url: URL) {
+        do {
+            let fileSize = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize
+                ?? (SeaLegsProfileArchive.maximumArchiveBytes + 1)
+            guard fileSize <= SeaLegsProfileArchive.maximumArchiveBytes else {
+                throw ProfileTransferError.archiveTooLarge
+            }
+            let archive = try SeaLegsProfileArchive.decode(Data(contentsOf: url, options: .mappedIfSafe))
+            state.pendingProfileImport = ProfileImportResolver.preview(
+                archive: archive,
+                existing: state.profiles
+            )
+            state.statusMessage = "Review the imported profiles before applying changes."
+        } catch {
+            state.pendingProfileImport = nil
+            state.statusMessage = String(format: state.t("Profile import failed: %@"), error.localizedDescription)
+        }
+    }
+
+    func resolvePendingProfileImport(_ strategy: ProfileImportStrategy) {
+        guard let preview = state.pendingProfileImport else {
+            return
+        }
+        defer { state.pendingProfileImport = nil }
+        guard strategy != .cancel else {
+            state.statusMessage = "Profile import cancelled."
+            return
+        }
+
+        cancelFeatureDemo(restoreOverlay: true)
+        let previousDisplayedProfile = state.displayedProfile
+        let overlayWasVisible = overlayState.enabled
+        let nextProfiles = ProfileImportResolver.resolve(
+            preview: preview,
+            existing: state.profiles,
+            strategy: strategy
+        )
+        guard saveProfiles(nextProfiles) else {
+            return
+        }
+        state.profiles = nextProfiles
+        if let activeID = state.activeProfile?.id {
+            state.activeProfile = nextProfiles.first(where: { $0.id == activeID })
+        }
+        if let manualID = state.manualProfileID,
+           !nextProfiles.contains(where: { $0.id == manualID }) {
+            state.manualProfileID = nil
+        }
+        if let selectedID = state.selectedProfileID,
+           !nextProfiles.contains(where: { $0.id == selectedID }) {
+            state.selectedProfileID = nextProfiles.first(where: { !$0.isTemplate })?.id
+                ?? nextProfiles.first?.id
+        }
+        if state.displayedProfile != previousDisplayedProfile {
+            synchronizeRuntimeAfterProfileImport(overlayWasVisible: overlayWasVisible)
+        }
+        state.statusMessage = String(format: state.t("Imported %d profile(s)."), preview.archive.profiles.count)
+        menuRefreshHandler?()
+    }
+
+    func refreshLaunchAtLoginStatus() {
+        state.launchAtLoginStatus = launchAtLoginService.status
+    }
+
+    func setLaunchAtLoginEnabled(_ enabled: Bool) {
+        do {
+            try launchAtLoginService.setEnabled(enabled)
+            refreshLaunchAtLoginStatus()
+            state.statusMessage = state.launchAtLoginStatus == .requiresApproval
+                ? "Launch at Login requires approval in System Settings."
+                : "Launch at Login updated."
+        } catch {
+            refreshLaunchAtLoginStatus()
+            state.statusMessage = String(format: state.t("Failed to update Launch at Login: %@"), error.localizedDescription)
+        }
+    }
+
+    func openLoginItemsSettings() {
+        launchAtLoginService.openSystemSettings()
+    }
+
+    var compatibilityReport: CompatibilityReportSnapshot {
+        CompatibilityReportBuilder.make(
+            state: state,
+            overlayState: overlayState,
+            selectedScope: appSettings.interface.overlayDisplayScope,
+            launchAtLoginStatus: state.launchAtLoginStatus
+        )
+    }
+
+    func runCompatibilityCheck() {
+        refreshPermissionState()
+        refreshLaunchAtLoginStatus()
+        if overlayState.enabled {
+            _ = targetOverlayRegions()
+        }
+        showFeatureDemoOverlay()
+        state.compatibilityStatusMessage = "Overlay test started. Confirm that the visual guides fit the game area."
+    }
+
+    func copyCompatibilityReport() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(compatibilityReport.text, forType: .string)
+        state.compatibilityStatusMessage = "Compatibility report copied."
+        state.statusMessage = "Compatibility report copied."
+    }
+
+    private func exportProfiles(_ profiles: [GameProfile], suggestedName: String) {
+        let panel = NSSavePanel()
+        panel.title = state.t("Export SeaLegs Profiles")
+        panel.nameFieldStringValue = "\(suggestedName).sealegsprofile"
+        panel.allowedContentTypes = [.seaLegsProfile]
+        overlayManager.setModalInteractionSuspended(true)
+        defer { overlayManager.setModalInteractionSuspended(false) }
+        guard panel.runModal() == .OK, let url = panel.url else {
+            return
+        }
+
+        do {
+            let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+            let archive = try SeaLegsProfileArchive.make(profiles: profiles, appVersion: version)
+            try archive.encoded().write(to: url, options: [.atomic])
+            state.statusMessage = String(
+                format: state.t("Exported %d profile(s) to %@."),
+                profiles.count,
+                url.lastPathComponent
+            )
+        } catch {
+            state.statusMessage = String(format: state.t("Profile export failed: %@"), error.localizedDescription)
+        }
+    }
+
+    private func sanitizedFilename(_ value: String) -> String {
+        let invalid = CharacterSet(charactersIn: "/:\\")
+        let components = value.components(separatedBy: invalid)
+        let sanitized = components.joined(separator: "-").trimmingCharacters(in: .whitespacesAndNewlines)
+        return sanitized.isEmpty ? "SeaLegs-Profile" : sanitized
+    }
+
+    private func synchronizeRuntimeAfterProfileImport(overlayWasVisible: Bool) {
+        guard let profile = state.displayedProfile else {
+            if overlayWasVisible {
+                hideOverlay()
+                stopAdaptiveCapture(resetMetrics: true)
+            }
+            return
+        }
+
+        let previewingDisabledProfile = overlayWasVisible
+            && state.manualProfileID == profile.id
+            && profile.overlay.mode == .off
+        let mode = previewingDisabledProfile ? ComfortMode.medium : profile.overlay.mode
+        state.currentMode = mode
+        captureSignals.update(config: profile.overlay)
+        guard overlayWasVisible else {
+            return
+        }
+        guard mode != .off else {
+            hideOverlay()
+            stopAdaptiveCapture(resetMetrics: true)
+            return
+        }
+
+        overlayState.apply(config: profile.overlay, mode: mode)
+        showOverlayForResolvedTarget()
+        if mode == .adaptive, state.activeProfile?.id == profile.id {
+            scheduleAdaptiveConfigurationRestart(profileID: profile.id)
+        } else if mode == .adaptive {
+            stopAdaptiveCapture(resetMetrics: true)
+            state.captureModeDescription = "preview"
+        } else {
+            stopAdaptiveCapture(resetMetrics: true)
+            state.captureModeDescription = state.activeProfile?.id == profile.id ? "manual overlay" : "preview"
+        }
+        updateOverlayHUDFromCurrentState()
+    }
+
     func updateTelemetrySettings(_ update: (inout TelemetrySettings) -> Void) {
         let previousSettings = appSettings
         update(&appSettings.telemetry)
@@ -726,7 +992,9 @@ final class AppCoordinator: ObservableObject {
             return
         }
         if overlayState.enabled {
-            showOverlay(on: targetScreens())
+            showOverlayForResolvedTarget()
+        } else {
+            _ = targetOverlayRegions()
         }
     }
 
@@ -835,7 +1103,7 @@ final class AppCoordinator: ObservableObject {
             return
         }
         overlayState.apply(config: profile.overlay, mode: mode)
-        showOverlay(on: targetScreens())
+        showOverlayForResolvedTarget()
         updateOverlayHUDFromCurrentState()
     }
 
@@ -853,7 +1121,7 @@ final class AppCoordinator: ObservableObject {
             state.manualProfileID = profile.id
         }
         overlayState.apply(config: profile.overlay, mode: mode)
-        showOverlay(on: targetScreens())
+        showOverlayForResolvedTarget()
         updateOverlayHUDFromCurrentState()
     }
 
@@ -1016,11 +1284,10 @@ final class AppCoordinator: ObservableObject {
 
     private func performMaintenance() {
         state.refreshTimeBasedStatus()
-        guard overlayState.enabled,
-              appSettings.interface.overlayDisplayScope == .activeGameDisplay else {
+        guard overlayState.enabled else {
             return
         }
-        overlayManager.updateTargetScreens(targetScreens())
+        overlayManager.updateRegions(targetOverlayRegions())
     }
 
     private func shellQuoted(_ value: String) -> String {
@@ -1069,8 +1336,8 @@ final class AppCoordinator: ObservableObject {
         promptForDiscomfortScore(context: .periodicPrompt)
     }
 
-    private func showOverlay(on screens: [NSScreen]) {
-        overlayManager.show(on: screens)
+    private func showOverlayForResolvedTarget() {
+        overlayManager.show(regions: targetOverlayRegions())
     }
 
     private func hideOverlay() {
@@ -1103,7 +1370,7 @@ final class AppCoordinator: ObservableObject {
             return
         }
         overlayState.apply(config: profile.overlay, mode: profile.overlay.mode)
-        showOverlay(on: targetScreens())
+        showOverlayForResolvedTarget()
         if profile.overlay.mode == .adaptive {
             startAdaptiveCaptureIfAllowed()
         } else {
@@ -1141,10 +1408,43 @@ final class AppCoordinator: ObservableObject {
         }
     }
 
-    private func targetScreens() -> [NSScreen] {
-        guard appSettings.interface.overlayDisplayScope == .activeGameDisplay else {
-            return NSScreen.screens
+    private func targetOverlayRegions() -> [OverlayPanelRegion] {
+        switch appSettings.interface.overlayDisplayScope {
+        case .gameWindow:
+            guard let processIdentifier = state.currentApp?.processIdentifier else {
+                state.overlayTargetDescription = "Game Window (Waiting for Game)"
+                state.overlayTargetFallbackActive = false
+                return displayRegions(for: activeGameScreens())
+            }
+            if let region = windowInfoProvider.primaryWindowPanelRegion(for: processIdentifier) {
+                state.overlayTargetDescription = "Game Window"
+                state.overlayTargetFallbackActive = false
+                return [region]
+            }
+            state.overlayTargetDescription = "Active Game Display (Window Fallback)"
+            state.overlayTargetFallbackActive = true
+            return displayRegions(for: activeGameScreens())
+        case .activeGameDisplay:
+            state.overlayTargetDescription = "Active Game Display"
+            state.overlayTargetFallbackActive = false
+            return displayRegions(for: activeGameScreens())
+        case .allDisplays:
+            state.overlayTargetDescription = "All Displays"
+            state.overlayTargetFallbackActive = false
+            return displayRegions(for: NSScreen.screens)
         }
+    }
+
+    private func displayRegions(for screens: [NSScreen]) -> [OverlayPanelRegion] {
+        screens.compactMap { screen in
+            guard let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID else {
+                return nil
+            }
+            return OverlayPanelRegion(identifier: .display(displayID), frame: screen.frame)
+        }
+    }
+
+    private func activeGameScreens() -> [NSScreen] {
         let activeDisplayIDs = gameDetector.activeDisplayIDs(for: state.currentApp)
         let matchingScreens = NSScreen.screens.filter { screen in
             guard let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID else {

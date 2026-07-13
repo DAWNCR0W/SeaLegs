@@ -31,6 +31,7 @@ enum DefaultProfiles {
         profile.bundleIdentifier = bundleIdentifier
         profile.executableName = executableName
         profile.executablePathHash = executablePath.map(GameProfile.stableHash(_:))
+        profile.isBuiltInTemplate = false
         profile.createdAt = Date()
         profile.updatedAt = Date()
         return profile

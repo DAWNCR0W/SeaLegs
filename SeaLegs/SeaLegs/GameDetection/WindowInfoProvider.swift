@@ -1,6 +1,22 @@
 import AppKit
 import Foundation
 
+/// A concrete AppKit panel frame resolved from either a game window or display.
+///
+/// Window bounds returned by `CGWindowListCopyWindowInfo` are in Quartz desktop
+/// coordinates, while `NSPanel` uses AppKit desktop coordinates. Keeping the
+/// converted frame and a stable identifier together prevents a move or resize
+/// from being mistaken for a new overlay target.
+struct OverlayPanelRegion: Equatable {
+    enum Identifier: Hashable {
+        case display(CGDirectDisplayID)
+        case gameWindow(Int)
+    }
+
+    let identifier: Identifier
+    let frame: CGRect
+}
+
 final class WindowInfoProvider {
     func visibleWindows(for processIdentifier: pid_t) -> [WindowInfo] {
         guard let rawWindows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]] else {
@@ -47,6 +63,83 @@ final class WindowInfoProvider {
         return Self.activeDisplayIDs(windows: windows, displayBounds: displayBounds)
     }
 
+    func primaryWindow(for processIdentifier: pid_t) -> WindowInfo? {
+        Self.primaryWindow(in: visibleWindows(for: processIdentifier))
+    }
+
+    func primaryWindowPanelRegion(for processIdentifier: pid_t) -> OverlayPanelRegion? {
+        let displayPairs: [(CGDirectDisplayID, CGRect)] = NSScreen.screens.compactMap { screen in
+            guard let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID else {
+                return nil
+            }
+            return (displayID, CGDisplayBounds(displayID))
+        }
+        return Self.primaryWindowPanelRegion(
+            windows: visibleWindows(for: processIdentifier),
+            displayBounds: Dictionary(uniqueKeysWithValues: displayPairs)
+        )
+    }
+
+    /// Chooses the largest valid visible window. Equal-area candidates use their
+    /// Quartz window number so the choice is stable across polling passes.
+    static func primaryWindow(in windows: [WindowInfo]) -> WindowInfo? {
+        windows
+            .filter { normalized($0.bounds) != nil }
+            .sorted { lhs, rhs in
+                let lhsArea = area(of: lhs.bounds)
+                let rhsArea = area(of: rhs.bounds)
+                if lhsArea != rhsArea {
+                    return lhsArea > rhsArea
+                }
+                return lhs.windowNumber < rhs.windowNumber
+            }
+            .first
+    }
+
+    static func primaryWindowPanelRegion(
+        windows: [WindowInfo],
+        displayBounds: [CGDirectDisplayID: CGRect],
+        mainDisplayID: CGDirectDisplayID = CGMainDisplayID()
+    ) -> OverlayPanelRegion? {
+        guard let window = primaryWindow(in: windows),
+              let coordinateReference = displayBounds[mainDisplayID]
+                ?? desktopQuartzBounds(displayBounds: displayBounds),
+              let frame = appKitFrame(
+                  fromQuartzFrame: window.bounds,
+                  desktopQuartzBounds: coordinateReference
+              ) else {
+            return nil
+        }
+        return OverlayPanelRegion(identifier: .gameWindow(window.windowNumber), frame: frame)
+    }
+
+    static func desktopQuartzBounds(displayBounds: [CGDirectDisplayID: CGRect]) -> CGRect? {
+        let validBounds = displayBounds.values.compactMap(normalized)
+        guard var desktopBounds = validBounds.first else {
+            return nil
+        }
+        for bounds in validBounds.dropFirst() {
+            desktopBounds = desktopBounds.union(bounds)
+        }
+        return desktopBounds
+    }
+
+    /// Converts a global Quartz rectangle (origin at the desktop's top edge) to
+    /// the matching global AppKit rectangle (origin at the desktop's bottom edge).
+    static func appKitFrame(fromQuartzFrame quartzFrame: CGRect, desktopQuartzBounds: CGRect) -> CGRect? {
+        guard let normalizedQuartzFrame = normalized(quartzFrame),
+              let normalizedDesktopBounds = normalized(desktopQuartzBounds) else {
+            return nil
+        }
+        let converted = CGRect(
+            x: normalizedQuartzFrame.minX,
+            y: normalizedDesktopBounds.maxY - normalizedQuartzFrame.maxY,
+            width: normalizedQuartzFrame.width,
+            height: normalizedQuartzFrame.height
+        )
+        return normalized(converted)
+    }
+
     static func activeDisplayIDs(
         windows: [WindowInfo],
         displayBounds: [CGDirectDisplayID: CGRect]
@@ -73,5 +166,26 @@ final class WindowInfoProvider {
             selected.insert(bestMatch)
         }
         return selected
+    }
+
+    private static func area(of frame: CGRect) -> CGFloat {
+        guard let frame = normalized(frame) else {
+            return 0
+        }
+        return frame.width * frame.height
+    }
+
+    private static func normalized(_ frame: CGRect) -> CGRect? {
+        guard !frame.isNull, !frame.isInfinite else {
+            return nil
+        }
+        let normalizedFrame = frame.standardized
+        guard normalizedFrame.width.isFinite,
+              normalizedFrame.height.isFinite,
+              normalizedFrame.width > 0,
+              normalizedFrame.height > 0 else {
+            return nil
+        }
+        return normalizedFrame
     }
 }

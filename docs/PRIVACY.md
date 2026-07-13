@@ -70,6 +70,23 @@ Diagnostics export should not contain:
 - Full executable paths.
 - Raw mouse paths.
 
+## Portable Profiles
+
+Profile archives (`.sealegsprofile`) include only user-editable matching hints,
+overlay settings, and adaptive settings. They do not include executable path
+hashes, session history, the local installation salt, permission state, raw
+capture content, or diagnostic data. Imports are validated before they are
+saved, are limited to 5 MB, and show their app matching hints and comfort mode
+before confirmation. A linked imported profile can activate when its matching
+app becomes active. `Keep Both` removes conflicting match hints, and built-in
+templates cannot be overwritten.
+
+## Compatibility Reports
+
+The in-app compatibility snapshot summarizes macOS, hardware, permission,
+overlay, and sampling state. Copying the snapshot does not include raw bundle
+identifiers, executable paths, game names, or window titles.
+
 ## User Control
 
 Users can:
@@ -90,5 +107,4 @@ these values and is discarded when its session is replaced or the app exits.
 ## Contributor Rule
 
 If a change adds data collection, persistence, export, or network behavior, the
-pull request must update this document and explain the user-visible privacy
-impact.
+change must update this document and explain the user-visible privacy impact.

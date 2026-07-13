@@ -8,14 +8,15 @@ SeaLegs is a native macOS menu bar app.
 2. `MenuBarController` exposes app actions through the macOS menu bar.
 3. `GameDetector` watches the frontmost app.
 4. A matching `GameProfile` selects overlay and adaptive settings.
-5. `OverlayManager` creates transparent click-through panels on the active game
-   display by default, or on all displays when the user selects that scope.
-6. `OverlayRenderer` draws vignette and visual guide elements with Metal.
-7. `ScreenCaptureManager` optionally captures low-resolution frames for
+5. `WindowInfoProvider` resolves the active game's window and display geometry.
+6. `OverlayManager` creates transparent click-through panels on the game window,
+   its display fallback, the active game display, or all displays.
+7. `OverlayRenderer` draws vignette and visual guide elements with Metal.
+8. `ScreenCaptureManager` optionally captures low-resolution frames for
    adaptive analysis when Screen Recording permission is granted.
-8. `MotionAnalyzer` converts reduced frames into numeric motion metrics.
-9. `MotionScoreEngine` maps metrics to overlay strength.
-10. `SessionLogger` stores numeric session samples when enabled.
+9. `MotionAnalyzer` converts reduced frames into numeric motion metrics.
+10. `MotionScoreEngine` maps metrics to overlay strength.
+11. `SessionLogger` stores numeric session samples when enabled.
 
 The detected game profile and a manual preview profile are separate runtime
 states. Editing or previewing a preset must not make it the automatically
@@ -32,7 +33,9 @@ detected game.
 - `Localization`: app string localization.
 - `Overlay`: NSPanel, Metal view, renderer, and overlay state.
 - `Permissions`: macOS permission checks and System Settings routing.
-- `Profiles`: default profiles, persistence, and game setting guidance.
+- `Profiles`: default profiles, persistence, portable import/export, and game
+  setting guidance.
+- `App/LaunchAtLoginService`: Service Management registration and status.
 - `Telemetry`: local session logging and reports.
 - `UI`: Settings, onboarding, reports, debug HUD, and profile editor.
 
@@ -44,6 +47,10 @@ The privacy-sensitive boundary is capture and diagnostics:
 - Raw screenshots, video, OCR, typed text, and raw input paths must not be
   persisted.
 - Diagnostics must use numeric state and redacted or salted identifiers.
+- Portable profiles must omit local path hashes, session data, and permission
+  state.
+- Compatibility reports must omit raw bundle identifiers, executable paths,
+  and window titles.
 - Disabling session logging applies to samples, ratings, and emergency events.
 
 Any change crossing this boundary needs explicit review.
@@ -68,8 +75,8 @@ Frame output is invalidated before stopping the underlying stream, including
 the stop-error path.
 
 A low-frequency main-run-loop maintenance timer refreshes time-based capture
-readiness and retargets the overlay when the active game window moves between
-displays. It does not capture frames or run motion analysis.
+readiness and retargets the overlay when the active game window moves, resizes,
+or changes displays. It does not capture frames or run motion analysis.
 
 ## Persistence
 
@@ -91,6 +98,9 @@ Highest-value tests cover:
 
 - Motion score math.
 - Overlay state mapping.
+- Multi-display game-window geometry and fallback mapping.
 - Profile persistence and migration.
+- Portable profile validation and conflict resolution.
 - Diagnostics redaction.
 - Permission and capture fallback behavior.
+- Isolated UI smoke coverage for Settings navigation.

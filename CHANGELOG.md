@@ -7,6 +7,47 @@ once tagged releases begin.
 
 ## Unreleased
 
+## [0.2.0] - 2026-07-13
+
+### Added
+
+- Game Window overlay targeting that follows the active game's largest visible
+  window as it moves or resizes, with an automatic Active Game Display fallback.
+- Per-profile horizontal and vertical positioning for the center dot and minimal
+  crosshair, plus a one-click position reset.
+- Versioned `.sealegsprofile` import and export with a review screen and explicit
+  Replace Existing, Keep Both, or Cancel conflict handling.
+- A Compatibility settings page for game registration, overlay targeting,
+  Adaptive sample readiness, permissions, and privacy-preserving report copying.
+- A Launch SeaLegs at Login setting backed by the macOS Login Items service.
+- Automated macOS UI smoke coverage and GitHub Actions quality gates for project
+  reproducibility, tests, Analyze, and unsafe installation guidance.
+
+### Changed
+
+- New installations now prefer Game Window targeting; existing stored Active Game
+  Display and All Displays preferences remain unchanged.
+- Built-in templates now have an explicit protected identity, allowing imported
+  unlinked profiles to remain editable without being mistaken for templates.
+- The project generator and DMG builder now read the marketing version from the
+  repository `VERSION` file and use build number `2` for v0.2.0.
+- Added Korean, Japanese, and Simplified Chinese coverage for all v0.2.0 controls,
+  statuses, import warnings, and compatibility guidance.
+
+### Fixed
+
+- Prevented profile imports from replacing or unlocking protected built-in
+  templates, even when an archive contains the same profile identifier.
+- Made game-window coordinate conversion use the main display as the global
+  vertical reference so arrangements above or below the primary display align.
+
+### Security
+
+- Portable profile archives exclude executable-path hashes, sessions, diagnostic
+  salts, permissions, runtime selections, and captured content.
+- Compatibility reports exclude screenshots, frames, paths, window titles, and
+  raw application identifiers.
+
 ## [0.1.0] - 2026-07-10
 
 ### Added

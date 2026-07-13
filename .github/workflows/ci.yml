@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'release/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    name: macOS quality gates (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-14
+          - macos-15
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Select Swift 6 toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${{ matrix.os }}" in
+            macos-14) xcode_path=/Applications/Xcode_16.2.app ;;
+            macos-15) xcode_path=/Applications/Xcode_16.4.app ;;
+          esac
+          sudo xcode-select --switch "$xcode_path"
+          xcodebuild -version
+          swift --version
+
+      - name: Install locked project generator dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Verify deterministic project generation
+        shell: bash
+        run: |
+          set -euo pipefail
+          project_files=(
+            SeaLegs/SeaLegs.xcodeproj/project.pbxproj
+            SeaLegs/SeaLegs.xcodeproj/xcshareddata/xcschemes/SeaLegs.xcscheme
+          )
+
+          bundle exec ruby SeaLegs/Scripts/generate_xcodeproj.rb
+          first_hashes="$(shasum -a 256 "${project_files[@]}")"
+          bundle exec ruby SeaLegs/Scripts/generate_xcodeproj.rb
+          second_hashes="$(shasum -a 256 "${project_files[@]}")"
+
+          test "$first_hashes" = "$second_hashes"
+          git diff --exit-code -- SeaLegs/SeaLegs.xcodeproj
+          test -z "$(git status --porcelain -- SeaLegs/SeaLegs.xcodeproj)"
+
+      - name: Check whitespace errors
+        run: git diff --check "$(git hash-object -t tree /dev/null)" HEAD
+
+      - name: Scan for unsafe installation overrides
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -n -E \
+            'spctl[[:space:]]+--master-disable|xattr[[:space:]]+-[^[:space:]]*r|sudo[[:space:]]+xattr' \
+            -- .; then
+            echo 'Unsafe Gatekeeper override pattern found.' >&2
+            exit 1
+          fi
+
+      - name: Run unit tests
+        run: |
+          mkdir -p TestResults
+          xcodebuild test \
+            -project SeaLegs/SeaLegs.xcodeproj \
+            -scheme SeaLegs \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -only-testing:SeaLegsTests \
+            -derivedDataPath "$PWD/DerivedData/unit" \
+            -resultBundlePath "$PWD/TestResults/SeaLegsTests.xcresult"
+
+      - name: Run UI tests
+        run: |
+          mkdir -p TestResults
+          xcodebuild test \
+            -project SeaLegs/SeaLegs.xcodeproj \
+            -scheme SeaLegs \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -only-testing:SeaLegsUITests \
+            -retry-tests-on-failure \
+            -test-iterations 2 \
+            -derivedDataPath "$PWD/DerivedData/ui" \
+            -resultBundlePath "$PWD/TestResults/SeaLegsUITests.xcresult"
+
+      - name: Analyze
+        if: ${{ matrix.os == 'macos-15' }}
+        run: |
+          xcodebuild analyze \
+            -project SeaLegs/SeaLegs.xcodeproj \
+            -scheme SeaLegs \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$PWD/DerivedData/analyze" \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload Xcode result bundles
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: xcresult-${{ matrix.os }}
+          path: TestResults
+          if-no-files-found: ignore

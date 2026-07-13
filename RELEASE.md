@@ -14,14 +14,16 @@ Tag releases as `vX.Y.Z`. Keep `CFBundleShortVersionString`, the changelog, the
 tag, the DMG filename, and the GitHub Release title on the same version.
 
 For `0.x`, the bundle version, tag, changelog entry, and release version remain
-numeric (for example, `0.1.0` and `v0.1.0`). The DMG artifact directories and
+numeric (for example, `0.2.0` and `v0.2.0`). The DMG artifact directories and
 filenames use the numeric version format.
 
 ## Pre-Release Checklist
 
 - Confirm the release source is committed and the worktree is clean.
-- Run `ruby SeaLegs/Scripts/generate_xcodeproj.rb` from the repository root.
-- Confirm only `SeaLegs/SeaLegs.xcodeproj/project.pbxproj` exists.
+- Run `bundle install`, then `bundle exec ruby SeaLegs/Scripts/generate_xcodeproj.rb`
+  from the repository root.
+- Confirm the generated `project.pbxproj` and shared `SeaLegs.xcscheme` are
+  committed and unchanged after a second generator run.
 - Run `git diff --check`.
 - Run the complete XCTest suite and read the xcresult summary.
 - Run Xcode Analyze and a Release build.
@@ -58,7 +60,7 @@ The script:
 1. Regenerates the Xcode project with the requested version and build number.
 2. Archives an arm64 Release build with an ad-hoc signature and Hardened
    Runtime.
-3. Verifies bundle version `0.1.0`, build `1`, architecture, and code seal.
+3. Verifies bundle version `0.2.0`, build `2`, architecture, and code seal.
 4. Creates a compressed DMG containing `SeaLegs.app` and an `Applications`
    shortcut.
 5. Attaches the DMG read-only and verifies its mounted contents.
@@ -67,9 +69,9 @@ The script:
 Default output:
 
 ```text
-dist/v0.1.0/SeaLegs-0.1.0-arm64.dmg
-dist/v0.1.0/SHA256SUMS.txt
-dist/v0.1.0/BUILD_MANIFEST.txt
+dist/v0.2.0/SeaLegs-0.2.0-arm64.dmg
+dist/v0.2.0/SHA256SUMS.txt
+dist/v0.2.0/BUILD_MANIFEST.txt
 ```
 
 An existing artifact set is not replaced unless `--overwrite` is supplied.
@@ -79,9 +81,9 @@ unnotarized release and is recorded in the manifest; it is not a build failure.
 ## Verify the Artifact
 
 ```bash
-cd dist/v0.1.0
+cd dist/v0.2.0
 shasum -a 256 -c SHA256SUMS.txt
-hdiutil verify SeaLegs-0.1.0-arm64.dmg
+hdiutil verify SeaLegs-0.2.0-arm64.dmg
 ```
 
 Also test from a fresh macOS user account:
@@ -99,7 +101,7 @@ primary installation path.
 ## Publish a 0.x GitHub Release
 
 1. Push the verified release commit to `main`.
-2. Create and push an annotated tag such as `v0.1.0`.
+2. Create and push an annotated tag such as `v0.2.0`.
 3. Create a GitHub Release.
 4. Use the changelog entry as the release body.
 5. Attach the DMG, `SHA256SUMS.txt`, and `BUILD_MANIFEST.txt`.

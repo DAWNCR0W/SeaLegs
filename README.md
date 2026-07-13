@@ -37,7 +37,7 @@ The downloadable DMG is ad-hoc signed with Hardened Runtime, but it is **not**
 signed with an Apple Developer ID and is **not** notarized by Apple. Gatekeeper
 will therefore show an unidentified-developer warning on first launch.
 
-1. Download `SeaLegs-0.1.0-arm64.dmg` and `SHA256SUMS.txt` from
+1. Download `SeaLegs-0.2.0-arm64.dmg` and `SHA256SUMS.txt` from
    [GitHub Releases](https://github.com/DAWNCR0W/SeaLegs/releases).
 2. In Terminal, open the download directory and verify the artifact:
 
@@ -65,9 +65,8 @@ SeaLegs helps you add stable visual references to games that move quickly or use
 Core features:
 
 - Menu bar app with quick access to settings and overlay actions
-- Transparent click-through overlay on the active game display by default,
-  with an optional all-displays mode; the active target follows the game
-  window when it moves between displays
+- Transparent click-through overlay that can follow the game window as it
+  moves or resizes, target the active game display, or cover all displays
 - Soft edge vignette for reducing peripheral motion intensity
 - Center dot and minimal crosshair for stable visual reference
 - Horizon guide for driving, flying, and large camera turns
@@ -81,6 +80,10 @@ Core features:
 - Local-only numeric session logs and reports
 - Game settings checklist for common comfort-related options
 - Calibration and diagnostics export
+- Per-profile center-dot and crosshair positioning
+- Portable `.sealegsprofile` import and export with conflict review
+- Privacy-preserving compatibility checks and copyable support reports
+- Optional launch at login through macOS Login Items
 
 ## How It Works
 
@@ -117,7 +120,7 @@ Adaptive mode is designed for comfort tuning, not game analysis, cheating, or au
 5. Open Settings > Overlay and choose a mode.
 6. If you want automatic strength adjustment, open Settings > Adaptive and grant Screen Recording permission.
 7. Add the current game as a profile from the menu bar if you want automatic game matching.
-8. On a multi-display Mac, choose `Active Game Display` or `All Displays` in Settings > General.
+8. Choose `Game Window`, `Active Game Display`, or `All Displays` in Settings > General.
 
 If an existing saved profile feels too subtle, use `Apply Recommended Visual Aids` in Settings > Overlay.
 
@@ -162,8 +165,9 @@ All core actions are also available from the menu bar.
 ## Build
 
 ```bash
+bundle install
 cd SeaLegs
-ruby Scripts/generate_xcodeproj.rb
+BUNDLE_GEMFILE=../Gemfile bundle exec ruby Scripts/generate_xcodeproj.rb
 xcodebuild -project SeaLegs.xcodeproj -scheme SeaLegs -destination 'platform=macOS' build
 ```
 
@@ -175,7 +179,7 @@ cd SeaLegs
 ./Scripts/build_dmg.sh
 ```
 
-Artifacts are written to `dist/v0.1.0/` by default. The script verifies
+Artifacts are written to `dist/v0.2.0/` by default. The script verifies
 the app version, build number, architecture, Hardened Runtime signature, DMG
 contents, and SHA-256 checksum before publishing the final files.
 
@@ -183,7 +187,8 @@ For more stable local permission behavior, generate the project with your Apple 
 
 ```bash
 cd SeaLegs
-SEALEGS_DEVELOPMENT_TEAM="<TEAM_ID>" ruby Scripts/generate_xcodeproj.rb
+SEALEGS_DEVELOPMENT_TEAM="<TEAM_ID>" BUNDLE_GEMFILE=../Gemfile \
+  bundle exec ruby Scripts/generate_xcodeproj.rb
 xcodebuild -project SeaLegs.xcodeproj -scheme SeaLegs -destination 'platform=macOS' build
 ```
 
@@ -266,5 +271,5 @@ To regenerate icon assets:
 ```bash
 cd SeaLegs
 python3 Scripts/generate_app_icon.py
-ruby Scripts/generate_xcodeproj.rb
+BUNDLE_GEMFILE=../Gemfile bundle exec ruby Scripts/generate_xcodeproj.rb
 ```
