@@ -7,3 +7,6 @@ dist/
 xcuserdata/
 .swiftpm/
 .serena/
+.omx/
+vendor/bundle/
+.bundle/
