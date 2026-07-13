@@ -30,7 +30,19 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Select Swift 6 toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${{ matrix.os }}" in
+            macos-14) xcode_path=/Applications/Xcode_16.2.app ;;
+            macos-15) xcode_path=/Applications/Xcode_16.4.app ;;
+          esac
+          sudo xcode-select --switch "$xcode_path"
+          xcodebuild -version
+          swift --version
 
       - name: Install locked project generator dependencies
         run: |
@@ -108,7 +120,7 @@ jobs:
 
       - name: Upload Xcode result bundles
         if: ${{ failure() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: xcresult-${{ matrix.os }}
           path: TestResults
