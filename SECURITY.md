@@ -6,13 +6,14 @@ privately.
 
 ## Supported Versions
 
-SeaLegs is pre-1.0. Security fixes target the latest `main` branch unless a
-tagged release line is created later.
+SeaLegs is pre-1.0. Security fixes target the latest supported release and the
+current `main` branch.
 
 | Version | Supported |
 | --- | --- |
+| `0.2.x` | Yes |
 | `main` | Yes |
-| Older snapshots | No |
+| `0.1.x` and older snapshots | No |
 
 ## Report a Vulnerability
 
