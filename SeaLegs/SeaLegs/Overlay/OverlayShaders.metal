@@ -16,11 +16,13 @@ struct OverlayUniforms {
     uint centerDotEnabled;
     float centerDotOpacity;
     float centerDotRadius;
+    float2 centerDotPosition;
 
     uint crosshairEnabled;
     float crosshairOpacity;
     float crosshairLength;
     float crosshairThickness;
+    float2 crosshairPosition;
 
     uint horizonEnabled;
     float horizonOpacity;
@@ -64,17 +66,18 @@ fragment float4 overlayFragment(VertexOut in [[stage_in]], constant OverlayUnifo
     float guideAlpha = 0.0;
 
     float2 px = uv * u.viewportSize;
-    float2 centerPx = float2(0.5, 0.5) * u.viewportSize;
+    float2 centerDotPx = clamp(u.centerDotPosition, float2(0.0), float2(1.0)) * u.viewportSize;
+    float2 crosshairPx = clamp(u.crosshairPosition, float2(0.0), float2(1.0)) * u.viewportSize;
 
     if (u.centerDotEnabled != 0) {
-        float d = distance(px, centerPx);
+        float d = distance(px, centerDotPx);
         float dotAlpha = 1.0 - smoothstep(u.centerDotRadius, u.centerDotRadius + 1.5, d);
         guideAlpha = max(guideAlpha, dotAlpha * u.centerDotOpacity);
     }
 
     if (u.crosshairEnabled != 0) {
-        float dx = abs(px.x - centerPx.x);
-        float dy = abs(px.y - centerPx.y);
+        float dx = abs(px.x - crosshairPx.x);
+        float dy = abs(px.y - crosshairPx.y);
         bool horizontal = (dx < u.crosshairLength && dy < u.crosshairThickness);
         bool vertical = (dy < u.crosshairLength && dx < u.crosshairThickness);
         if (horizontal || vertical) {

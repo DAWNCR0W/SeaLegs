@@ -22,6 +22,11 @@ final class AppState: ObservableObject {
     @Published private(set) var readinessReferenceDate = Date()
     @Published var lastSessionReport: SessionReport?
     @Published var captureModeDescription = "stopped"
+    @Published var overlayTargetDescription = "Active Game Display"
+    @Published var overlayTargetFallbackActive = false
+    @Published var launchAtLoginStatus: LaunchAtLoginStatus = .notRegistered
+    @Published var pendingProfileImport: ProfileImportPreview?
+    @Published var compatibilityStatusMessage = "Compatibility check not run yet."
     @Published var statusMessage = "Ready"
     @Published var diagnosticsStatusMessage = "No diagnostics export yet."
 

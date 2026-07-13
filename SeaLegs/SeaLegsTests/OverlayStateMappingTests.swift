@@ -28,6 +28,38 @@ final class OverlayStateMappingTests: XCTestCase {
         XCTAssertEqual(state.vignetteOuterRadius, config.outerRadius)
     }
 
+    func testOverlayStateMapsNormalizedCenterDotAndCrosshairPositions() {
+        var config = DefaultProfiles.profile(for: .desktopFPS).overlay
+        config.centerDot.positionX = 0.18
+        config.centerDot.positionY = 0.74
+        config.crosshair.positionX = 0.62
+        config.crosshair.positionY = 0.31
+        let state = OverlayState()
+
+        state.apply(config: config, mode: .high)
+
+        XCTAssertEqual(state.centerDotPositionX, 0.18, accuracy: 0.001)
+        XCTAssertEqual(state.centerDotPositionY, 0.74, accuracy: 0.001)
+        XCTAssertEqual(state.crosshairPositionX, 0.62, accuracy: 0.001)
+        XCTAssertEqual(state.crosshairPositionY, 0.31, accuracy: 0.001)
+    }
+
+    func testOverlayStateClampsPersistedGuidePositionsToUnitRange() {
+        var config = DefaultProfiles.profile(for: .desktopFPS).overlay
+        config.centerDot.positionX = -0.2
+        config.centerDot.positionY = 1.4
+        config.crosshair.positionX = 2
+        config.crosshair.positionY = -1
+        let state = OverlayState()
+
+        state.apply(config: config, mode: .high)
+
+        XCTAssertEqual(state.centerDotPositionX, 0)
+        XCTAssertEqual(state.centerDotPositionY, 1)
+        XCTAssertEqual(state.crosshairPositionX, 1)
+        XCTAssertEqual(state.crosshairPositionY, 0)
+    }
+
     func testEmergencyAppliesStrongerVignette() {
         let state = OverlayState()
         let config = DefaultProfiles.profile(for: .racing).overlay

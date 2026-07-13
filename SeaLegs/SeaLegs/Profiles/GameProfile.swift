@@ -35,11 +35,16 @@ struct GameProfile: Codable, Identifiable, Equatable {
     var adaptive: AdaptiveConfig
     var feedback: FeedbackConfig
     var settingsChecklist: [GameSettingRecommendation]
+    var isBuiltInTemplate: Bool
     var createdAt: Date
     var updatedAt: Date
 
     var isTemplate: Bool {
-        bundleIdentifier == nil && executableName == nil && executablePathHash == nil
+        isBuiltInTemplate
+    }
+
+    var hasApplicationMatch: Bool {
+        bundleIdentifier != nil || executableName != nil || executablePathHash != nil
     }
 
     init(
@@ -53,6 +58,7 @@ struct GameProfile: Codable, Identifiable, Equatable {
         adaptive: AdaptiveConfig = .standard,
         feedback: FeedbackConfig = .standard,
         settingsChecklist: [GameSettingRecommendation]? = nil,
+        isBuiltInTemplate: Bool? = nil,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -66,6 +72,8 @@ struct GameProfile: Codable, Identifiable, Equatable {
         self.adaptive = adaptive
         self.feedback = feedback
         self.settingsChecklist = settingsChecklist ?? DefaultGameSettingRecommendations.recommendations(for: category)
+        self.isBuiltInTemplate = isBuiltInTemplate
+            ?? (bundleIdentifier == nil && executableName == nil && executablePath == nil)
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
@@ -81,6 +89,7 @@ struct GameProfile: Codable, Identifiable, Equatable {
         case adaptive
         case feedback
         case settingsChecklist
+        case isBuiltInTemplate
         case createdAt
         case updatedAt
     }
@@ -98,6 +107,8 @@ struct GameProfile: Codable, Identifiable, Equatable {
         feedback = try container.decode(FeedbackConfig.self, forKey: .feedback)
         settingsChecklist = try container.decodeIfPresent([GameSettingRecommendation].self, forKey: .settingsChecklist)
             ?? DefaultGameSettingRecommendations.recommendations(for: category)
+        isBuiltInTemplate = try container.decodeIfPresent(Bool.self, forKey: .isBuiltInTemplate)
+            ?? (bundleIdentifier == nil && executableName == nil && executablePathHash == nil)
         createdAt = try container.decode(Date.self, forKey: .createdAt)
         updatedAt = try container.decode(Date.self, forKey: .updatedAt)
     }

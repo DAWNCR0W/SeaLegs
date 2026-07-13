@@ -3,13 +3,25 @@ import SwiftUI
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
-    private let coordinator = AppCoordinator()
+    private let isUITesting = ProcessInfo.processInfo.arguments.contains("--ui-testing")
+    private lazy var coordinator: AppCoordinator = {
+        let environment = ProcessInfo.processInfo.environment
+        let profileStore = environment["SEALEGS_UI_TEST_DATA_DIR"].map {
+            ProfileStore(baseURL: URL(fileURLWithPath: $0, isDirectory: true))
+        } ?? ProfileStore()
+        return AppCoordinator(
+            profileStore: profileStore,
+            runtimeServicesEnabled: !isUITesting
+        )
+    }()
     private var menuBarController: MenuBarController?
     private var settingsWindowController: NSWindowController?
     private var onboardingWindowController: NSWindowController?
     private var reportWindowController: NSWindowController?
     private var debugWindowController: NSWindowController?
     private var workspaceObservers: [NSObjectProtocol] = []
+    private var didFinishLaunching = false
+    private var pendingProfileURLs: [URL] = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         coordinator.openSettingsHandler = { [weak self] in
@@ -21,9 +33,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         coordinator.showDebugHUDHandler = { [weak self] visible in
             self?.setDebugHUDVisible(visible)
         }
-        menuBarController = MenuBarController(coordinator: coordinator)
-        observeWorkspaceLifecycle()
+        if !isUITesting {
+            menuBarController = MenuBarController(coordinator: coordinator)
+            observeWorkspaceLifecycle()
+        }
         coordinator.start()
+        didFinishLaunching = true
+        if let pendingProfileURL = pendingProfileURLs.first {
+            pendingProfileURLs.removeAll()
+            openProfileArchive(pendingProfileURL)
+            return
+        }
 #if DEBUG
         let arguments = ProcessInfo.processInfo.arguments
         if arguments.contains("--show-settings") {
@@ -47,6 +67,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         workspaceObservers.forEach(center.removeObserver(_:))
         workspaceObservers.removeAll()
         coordinator.stop()
+    }
+
+    func application(_ application: NSApplication, open urls: [URL]) {
+        guard let profileURL = urls.first(where: { $0.pathExtension.lowercased() == "sealegsprofile" }) else {
+            return
+        }
+        guard didFinishLaunching else {
+            pendingProfileURLs.append(profileURL)
+            return
+        }
+        openProfileArchive(profileURL)
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
@@ -105,6 +136,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             defer: false
         )
         window.title = AppConstants.appName
+        window.identifier = NSUserInterfaceItemIdentifier("sealegs.settings.window")
         window.isReleasedWhenClosed = false
         window.delegate = self
         window.minSize = NSSize(width: 960, height: 620)
@@ -116,6 +148,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         coordinator.setAppInteractionSuspended(true)
         controller.showWindow(nil)
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    private func openProfileArchive(_ url: URL) {
+        showSettings()
+        coordinator.importProfiles(from: url)
     }
 
     func showReport() {

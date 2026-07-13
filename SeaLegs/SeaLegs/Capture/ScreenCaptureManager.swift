@@ -1,7 +1,7 @@
 import AVFoundation
 import Foundation
 import OSLog
-import ScreenCaptureKit
+@preconcurrency import ScreenCaptureKit
 
 @MainActor
 @available(macOS 14.0, *)

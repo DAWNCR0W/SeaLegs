@@ -10,8 +10,8 @@ Build an Apple Silicon, ad-hoc signed SeaLegs DMG without modifying the
 source worktree.
 
 Environment overrides:
-  SEALEGS_RELEASE_VERSION  Marketing version (default: 0.1.0)
-  SEALEGS_BUILD_NUMBER     Bundle build number (default: 1)
+  SEALEGS_RELEASE_VERSION  Marketing version (default: VERSION file)
+  SEALEGS_BUILD_NUMBER     Bundle build number (default: 2)
   SEALEGS_RELEASE_ARCH     Build architecture (default: arm64)
   SEALEGS_OUTPUT_DIR       Artifact directory
 EOF
@@ -45,8 +45,20 @@ script_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 project_root="$(cd -P "$script_dir/.." && pwd -P)"
 repository_root="$(cd -P "$project_root/.." && pwd -P)"
 
-version="${SEALEGS_RELEASE_VERSION:-0.1.0}"
-build_number="${SEALEGS_BUILD_NUMBER:-1}"
+version_file="$repository_root/VERSION"
+if [[ ! -r "$version_file" ]]; then
+  echo "Missing canonical version file: $version_file" >&2
+  exit 1
+fi
+
+default_version="$(tr -d '[:space:]' < "$version_file")"
+if [[ -z "$default_version" ]]; then
+  echo "Canonical version file is empty: $version_file" >&2
+  exit 1
+fi
+
+version="${SEALEGS_RELEASE_VERSION:-$default_version}"
+build_number="${SEALEGS_BUILD_NUMBER:-2}"
 architecture="${SEALEGS_RELEASE_ARCH:-arm64}"
 requested_output_dir="${SEALEGS_OUTPUT_DIR:-$repository_root/dist/v${version}}"
 output_parent="$(dirname "$requested_output_dir")"
@@ -165,12 +177,21 @@ release_script_dir="$release_project_root/Scripts"
 echo "Generating the Xcode project for SeaLegs $version ($build_number)..."
 SEALEGS_MARKETING_VERSION="$version" \
 SEALEGS_BUILD_NUMBER="$build_number" \
-  ruby "$release_script_dir/generate_xcodeproj.rb"
+BUNDLE_GEMFILE="$repository_root/Gemfile" \
+  bundle exec ruby "$release_script_dir/generate_xcodeproj.rb"
 
 if [[ "$allow_dirty" != "1" ]] && ! cmp -s \
   "$release_project_root/SeaLegs.xcodeproj/project.pbxproj" \
   "$project_root/SeaLegs.xcodeproj/project.pbxproj"; then
   echo "Project generation differs from the committed SeaLegs.xcodeproj." >&2
+  echo "Regenerate and commit the project before building the release." >&2
+  exit 1
+fi
+
+if [[ "$allow_dirty" != "1" ]] && ! cmp -s \
+  "$release_project_root/SeaLegs.xcodeproj/xcshareddata/xcschemes/SeaLegs.xcscheme" \
+  "$project_root/SeaLegs.xcodeproj/xcshareddata/xcschemes/SeaLegs.xcscheme"; then
+  echo "Shared scheme generation differs from the committed SeaLegs.xcscheme." >&2
   echo "Regenerate and commit the project before building the release." >&2
   exit 1
 fi
