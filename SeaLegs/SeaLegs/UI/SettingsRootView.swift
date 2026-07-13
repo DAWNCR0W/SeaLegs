@@ -7,6 +7,7 @@ private enum SettingsPage: String, Hashable, Identifiable {
     case adaptive = "Adaptive"
     case assistant = "Assistant"
     case calibration = "Calibration"
+    case compatibility = "Compatibility"
     case hotkeys = "Hotkeys"
     case privacy = "Privacy"
     case reports = "Reports"
@@ -22,6 +23,7 @@ private enum SettingsPage: String, Hashable, Identifiable {
         case .adaptive: "waveform.path"
         case .assistant: "checklist"
         case .calibration: "slider.horizontal.3"
+        case .compatibility: "checkmark.shield"
         case .hotkeys: "command"
         case .privacy: "hand.raised"
         case .reports: "chart.xyaxis.line"
@@ -31,7 +33,7 @@ private enum SettingsPage: String, Hashable, Identifiable {
 
     static let primary: [SettingsPage] = [.general, .profiles]
     static let comfort: [SettingsPage] = [.overlay, .adaptive, .assistant, .calibration]
-    static let system: [SettingsPage] = [.hotkeys, .privacy, .reports, .debug]
+    static let system: [SettingsPage] = [.compatibility, .hotkeys, .privacy, .reports, .debug]
 }
 
 struct SettingsRootView: View {
@@ -56,6 +58,7 @@ struct SettingsRootView: View {
                     settingsLinks(SettingsPage.system)
                 }
             }
+            .accessibilityIdentifier("sealegs.settings.navigation")
             .navigationTitle("SeaLegs")
             .navigationSplitViewColumnWidth(min: 180, ideal: 210, max: 250)
         } detail: {
@@ -69,6 +72,7 @@ struct SettingsRootView: View {
             .navigationTitle(state.t((selectedPage ?? .general).rawValue))
         }
         .frame(minWidth: 960, minHeight: 620)
+        .accessibilityIdentifier("sealegs.settings.window")
     }
 
     @ViewBuilder
@@ -76,6 +80,7 @@ struct SettingsRootView: View {
         ForEach(pages) { page in
             Label(state.t(page.rawValue), systemImage: page.systemImage)
                 .tag(page)
+                .accessibilityIdentifier("sealegs.settings.page.\(page.rawValue.lowercased())")
         }
     }
 
@@ -94,6 +99,8 @@ struct SettingsRootView: View {
             GameSettingsAssistantView(coordinator: coordinator, state: state)
         case .calibration:
             CalibrationWizardView(coordinator: coordinator, state: state)
+        case .compatibility:
+            CompatibilityView(coordinator: coordinator, state: state, overlayState: coordinator.overlayState)
         case .hotkeys:
             HotkeysView(coordinator: coordinator, state: state)
         case .privacy:
@@ -261,6 +268,47 @@ private struct GeneralSettingsView: View {
                     }
                 }
                 .pickerStyle(.menu)
+                LabeledContent(
+                    state.t("Resolved Overlay Target"),
+                    value: state.t(state.overlayTargetDescription)
+                )
+                .accessibilityIdentifier("sealegs.general.resolved-target")
+                .accessibilityValue(Text(state.t(state.overlayTargetDescription)))
+                if state.overlayTargetFallbackActive {
+                    Label(
+                        state.t("The game window was not available, so SeaLegs is using the active game display."),
+                        systemImage: "arrow.trianglehead.branch"
+                    )
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                }
+            }
+            Section(state.t("Startup")) {
+                Toggle(state.t("Launch SeaLegs at Login"), isOn: Binding(
+                    get: { state.launchAtLoginStatus.isEnabled },
+                    set: { coordinator.setLaunchAtLoginEnabled($0) }
+                ))
+                LabeledContent(
+                    state.t("Launch at Login Status"),
+                    value: state.t(state.launchAtLoginStatus.label)
+                )
+                if state.launchAtLoginStatus == .requiresApproval {
+                    Text(state.t("Approve SeaLegs in System Settings > General > Login Items."))
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                }
+                CommandGrid {
+                    Button {
+                        coordinator.refreshLaunchAtLoginStatus()
+                    } label: {
+                        CommandLabel(title: state.t("Refresh"), systemImage: "arrow.clockwise")
+                    }
+                    Button {
+                        coordinator.openLoginItemsSettings()
+                    } label: {
+                        CommandLabel(title: state.t("Open Login Items Settings"), systemImage: "gearshape")
+                    }
+                }
             }
             Section(state.t("Actions")) {
                 CommandGrid {
@@ -401,6 +449,24 @@ private struct OverlaySettingsView: View {
                     range: 0...0.6
                 )
                 .disabled(profile?.overlay.centerDot.enabled != true)
+                SliderRow(
+                    title: state.t("Center Dot Horizontal Position"),
+                    value: floatBinding(
+                        get: { profile?.overlay.centerDot.positionX ?? 0.5 },
+                        set: { value in updateOverlay { $0.centerDot.positionX = value } }
+                    ),
+                    range: 0.1...0.9
+                )
+                .disabled(profile?.overlay.centerDot.enabled != true)
+                SliderRow(
+                    title: state.t("Center Dot Vertical Position"),
+                    value: floatBinding(
+                        get: { profile?.overlay.centerDot.positionY ?? 0.5 },
+                        set: { value in updateOverlay { $0.centerDot.positionY = value } }
+                    ),
+                    range: 0.1...0.9
+                )
+                .disabled(profile?.overlay.centerDot.enabled != true)
                 Toggle(state.t("Minimal Crosshair"), isOn: boolBinding(
                     get: { profile?.overlay.crosshair.enabled ?? false },
                     set: { value in updateOverlay { $0.crosshair.enabled = value } }
@@ -414,6 +480,35 @@ private struct OverlaySettingsView: View {
                     range: 0...0.6
                 )
                 .disabled(profile?.overlay.crosshair.enabled != true)
+                SliderRow(
+                    title: state.t("Crosshair Horizontal Position"),
+                    value: floatBinding(
+                        get: { profile?.overlay.crosshair.positionX ?? 0.5 },
+                        set: { value in updateOverlay { $0.crosshair.positionX = value } }
+                    ),
+                    range: 0.1...0.9
+                )
+                .disabled(profile?.overlay.crosshair.enabled != true)
+                SliderRow(
+                    title: state.t("Crosshair Vertical Position"),
+                    value: floatBinding(
+                        get: { profile?.overlay.crosshair.positionY ?? 0.5 },
+                        set: { value in updateOverlay { $0.crosshair.positionY = value } }
+                    ),
+                    range: 0.1...0.9
+                )
+                .disabled(profile?.overlay.crosshair.enabled != true)
+                Button {
+                    updateOverlay {
+                        $0.centerDot.positionX = 0.5
+                        $0.centerDot.positionY = 0.5
+                        $0.crosshair.positionX = 0.5
+                        $0.crosshair.positionY = 0.5
+                    }
+                } label: {
+                    Label(state.t("Reset Anchor Positions"), systemImage: "scope")
+                }
+                .buttonStyle(.bordered)
                 Toggle(state.t("Horizon Guide"), isOn: boolBinding(
                     get: { profile?.overlay.horizon.enabled ?? false },
                     set: { value in updateOverlay { $0.horizon.enabled = value } }
@@ -456,6 +551,7 @@ private struct OverlaySettingsView: View {
                 LabeledContent(state.t("Emergency"), value: overlayState.emergencyActive ? state.t("On") : state.t("Off"))
             }
         }
+        .accessibilityIdentifier("sealegs.overlay.page")
     }
 
     private func updateOverlay(_ update: @escaping (inout OverlayConfig) -> Void) {
@@ -874,6 +970,99 @@ private struct CalibrationWizardView: View {
             return .subtleDot
         }
         return .hidden
+    }
+}
+
+private struct CompatibilityView: View {
+    let coordinator: AppCoordinator
+    @ObservedObject var state: AppState
+    @ObservedObject var overlayState: OverlayState
+
+    var body: some View {
+        Form {
+            Section(state.t("Compatibility Check")) {
+                Text(state.t("Run this check with the game visible to confirm targeting and Adaptive readiness."))
+                    .foregroundStyle(.secondary)
+                compatibilityRow(
+                    title: state.t("Registered Game"),
+                    passed: state.activeProfile != nil,
+                    value: state.activeProfile == nil ? state.t("Not Active") : state.t("Active")
+                )
+                compatibilityRow(
+                    title: state.t("Overlay Target"),
+                    passed: !state.overlayTargetFallbackActive,
+                    value: state.t(state.overlayTargetDescription)
+                )
+                compatibilityRow(
+                    title: state.t("Overlay"),
+                    passed: overlayState.enabled,
+                    value: overlayState.enabled ? state.t("On") : state.t("Off")
+                )
+                compatibilityRow(
+                    title: state.t("Screen Recording"),
+                    passed: state.permissionState.screenRecordingGranted,
+                    value: state.permissionState.screenRecordingGranted ? state.t("Granted") : state.t("Optional")
+                )
+                compatibilityRow(
+                    title: state.t("Adaptive Samples"),
+                    passed: state.currentMode != .adaptive || (
+                        state.permissionState.screenRecordingGranted
+                            && state.lastSampleReceivedAt.map {
+                                state.readinessReferenceDate.timeIntervalSince($0) <= 3
+                            } == true
+                    ),
+                    value: state.localizedCaptureReadinessDescription
+                )
+                compatibilityRow(
+                    title: state.t("Launch at Login"),
+                    passed: state.launchAtLoginStatus != .unavailable,
+                    value: state.t(state.launchAtLoginStatus.label)
+                )
+            }
+            Section(state.t("Actions")) {
+                CommandGrid {
+                    Button {
+                        coordinator.runCompatibilityCheck()
+                    } label: {
+                        CommandLabel(title: state.t("Run Overlay Test"), systemImage: "play.circle")
+                    }
+                    Button {
+                        coordinator.copyCompatibilityReport()
+                    } label: {
+                        CommandLabel(title: state.t("Copy Compatibility Report"), systemImage: "doc.on.clipboard")
+                    }
+                    Button {
+                        coordinator.exportDiagnostics()
+                    } label: {
+                        CommandLabel(title: state.t("Export Diagnostics..."), systemImage: "square.and.arrow.up")
+                    }
+                    Button {
+                        coordinator.refreshPermissionState()
+                        coordinator.refreshLaunchAtLoginStatus()
+                    } label: {
+                        CommandLabel(title: state.t("Refresh"), systemImage: "arrow.clockwise")
+                    }
+                }
+                Text(state.t(state.compatibilityStatusMessage))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Section(state.t("Privacy")) {
+                Text(state.t("The compatibility report contains operational status only and excludes screenshots, frames, paths, window titles, and raw application identifiers."))
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .accessibilityIdentifier("sealegs.compatibility.page")
+        .onAppear {
+            coordinator.refreshLaunchAtLoginStatus()
+        }
+    }
+
+    private func compatibilityRow(title: String, passed: Bool, value: String) -> some View {
+        LabeledContent(title) {
+            Label(value, systemImage: passed ? "checkmark.circle.fill" : "exclamationmark.circle")
+                .foregroundStyle(passed ? Color.green : Color.orange)
+        }
     }
 }
 

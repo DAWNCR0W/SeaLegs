@@ -9,14 +9,20 @@ final class OverlayPanel: NSPanel {
 @MainActor
 final class OverlayPanelController {
     private var panel: OverlayPanel?
-    private var screen: NSScreen
+    private var panelFrame: CGRect
     private let overlayState: OverlayState
     private let appState: AppState
     private var menuInteractionSuspended = false
     private var appInteractionSuspended = false
 
     init(screen: NSScreen, overlayState: OverlayState, appState: AppState) {
-        self.screen = screen
+        self.panelFrame = screen.frame
+        self.overlayState = overlayState
+        self.appState = appState
+    }
+
+    init(frame: CGRect, overlayState: OverlayState, appState: AppState) {
+        self.panelFrame = frame
         self.overlayState = overlayState
         self.appState = appState
     }
@@ -29,7 +35,7 @@ final class OverlayPanelController {
         }
 
         let nextPanel = OverlayPanel(
-            contentRect: screen.frame,
+            contentRect: panelFrame,
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
@@ -43,7 +49,7 @@ final class OverlayPanelController {
         nextPanel.worksWhenModal = true
         configureForFullscreenPersistence(nextPanel)
 
-        let container = NSView(frame: nextPanel.contentView?.bounds ?? screen.frame)
+        let container = NSView(frame: nextPanel.contentView?.bounds ?? CGRect(origin: .zero, size: panelFrame.size))
         container.autoresizingMask = [.width, .height]
 
         let metalView = OverlayMetalView(frame: container.bounds)
@@ -68,7 +74,11 @@ final class OverlayPanelController {
     }
 
     func update(screen: NSScreen) {
-        self.screen = screen
+        update(frame: screen.frame)
+    }
+
+    func update(frame: CGRect) {
+        panelFrame = frame
         updateFrame()
     }
 
@@ -79,7 +89,7 @@ final class OverlayPanelController {
     }
 
     func updateFrame() {
-        panel?.setFrame(screen.frame, display: true)
+        panel?.setFrame(panelFrame, display: true)
         configureForFullscreenPersistence(panel)
         updatePresentationOrder()
     }

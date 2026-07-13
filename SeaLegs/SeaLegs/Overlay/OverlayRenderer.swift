@@ -11,10 +11,12 @@ struct OverlayUniforms {
     var centerDotEnabled: UInt32
     var centerDotOpacity: Float
     var centerDotRadius: Float
+    var centerDotPosition: SIMD2<Float>
     var crosshairEnabled: UInt32
     var crosshairOpacity: Float
     var crosshairLength: Float
     var crosshairThickness: Float
+    var crosshairPosition: SIMD2<Float>
     var horizonEnabled: UInt32
     var horizonOpacity: Float
     var horizonY: Float
@@ -100,10 +102,12 @@ final class OverlayRenderer: NSObject, MTKViewDelegate {
             centerDotEnabled: state.centerDotEnabled ? 1 : 0,
             centerDotOpacity: state.centerDotOpacity,
             centerDotRadius: state.centerDotRadius,
+            centerDotPosition: SIMD2<Float>(state.centerDotPositionX, state.centerDotPositionY),
             crosshairEnabled: state.crosshairEnabled ? 1 : 0,
             crosshairOpacity: state.crosshairOpacity,
             crosshairLength: state.crosshairLength,
             crosshairThickness: state.crosshairThickness,
+            crosshairPosition: SIMD2<Float>(state.crosshairPositionX, state.crosshairPositionY),
             horizonEnabled: state.horizonEnabled ? 1 : 0,
             horizonOpacity: state.horizonOpacity,
             horizonY: state.horizonY,

@@ -11,10 +11,14 @@ final class OverlayState: ObservableObject {
     @Published var centerDotEnabled = true
     @Published var centerDotOpacity: Float = 0.18
     @Published var centerDotRadius: Float = 3
+    @Published var centerDotPositionX: Float = 0.5
+    @Published var centerDotPositionY: Float = 0.5
     @Published var crosshairEnabled = false
     @Published var crosshairOpacity: Float = 0.16
     @Published var crosshairLength: Float = 22
     @Published var crosshairThickness: Float = 1
+    @Published var crosshairPositionX: Float = 0.5
+    @Published var crosshairPositionY: Float = 0.5
     @Published var horizonEnabled = false
     @Published var horizonOpacity: Float = 0.12
     @Published var horizonY: Float = 0.50
@@ -39,9 +43,13 @@ final class OverlayState: ObservableObject {
         centerDotEnabled = config.centerDot.enabled
         centerDotOpacity = anchorOpacity(config.centerDot, strength: strength, overlay: config)
         centerDotRadius = config.centerDot.size
+        centerDotPositionX = normalizedPosition(config.centerDot.positionX)
+        centerDotPositionY = normalizedPosition(config.centerDot.positionY)
         crosshairEnabled = config.crosshair.enabled
         crosshairOpacity = anchorOpacity(config.crosshair, strength: strength, overlay: config)
         crosshairLength = config.crosshair.size
+        crosshairPositionX = normalizedPosition(config.crosshair.positionX)
+        crosshairPositionY = normalizedPosition(config.crosshair.positionY)
         horizonEnabled = config.horizon.enabled
         horizonOpacity = anchorOpacity(config.horizon.opacity)
         horizonY = config.horizon.y
@@ -73,5 +81,9 @@ final class OverlayState: ObservableObject {
 
     private func anchorOpacity(_ opacity: Float) -> Float {
         emergencyActive ? min(1, max(opacity, 0.32)) : opacity
+    }
+
+    private func normalizedPosition(_ value: Float) -> Float {
+        min(1, max(0, value))
     }
 }

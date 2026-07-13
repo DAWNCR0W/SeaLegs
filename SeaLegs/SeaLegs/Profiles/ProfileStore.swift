@@ -38,7 +38,7 @@ struct AppSettings: Codable, Equatable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         telemetry = try container.decodeIfPresent(TelemetrySettings.self, forKey: .telemetry) ?? .standard
         privacy = try container.decodeIfPresent(PrivacySettings.self, forKey: .privacy) ?? .standard
-        interface = try container.decodeIfPresent(InterfaceSettings.self, forKey: .interface) ?? .standard
+        interface = try container.decodeIfPresent(InterfaceSettings.self, forKey: .interface) ?? .legacy
     }
 }
 
@@ -189,7 +189,7 @@ final class ProfileStore {
     }
 
     private func defaultIdentityKey(for profile: GameProfile) -> String? {
-        guard profile.bundleIdentifier == nil, profile.executableName == nil else {
+        guard profile.isTemplate else {
             return nil
         }
 
